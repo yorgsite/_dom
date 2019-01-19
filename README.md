@@ -11,9 +11,9 @@ No proxies or intrusive attributes except for custom models.
 
 <hr/>
 
-<div style="border:solid 1px #00f;"></diV>
-
 ## html
+
+<hr/>
 
 #### Instanciate html elements or structure
 
@@ -24,6 +24,8 @@ No proxies or intrusive attributes except for custom models.
 + *Array* **childs** [optional] : element childs. can contain strings an html elements.
 + *string* **nameSpace** [optional] : element namesapace if any.
 **returns** *HTMLElement*
+
+<br/>
 
 <u>Exemple:</u>
 ```javascript
@@ -46,6 +48,8 @@ document.body.appendChild(div);
 **_dom.model(tagName,constructor)**
 + *string* **tagName** : the custom element name. Should contain at least one "-" to avoid conflict with natives HTMLElements.
 + *function* **constructor** : receive the arguments of _dom but the dont have to respect the nomenclature excepted 'tagName'. Must return an HTMLElement.NB:constructor is scoped to its interface.
+
+<br/>
 
 <u>Exemple 1 :</u>
 
@@ -92,6 +96,8 @@ _dom.model('table-line',function(tagName,wlist,childlist){
 
 ```
 
+<br/>
+
 <u>Exemple 2 :</u>
 
 Instanciates and interact with model interface :
@@ -110,6 +116,8 @@ setTimeout(function(){
 
 ## css
 
+<hr/>
+
 #### create a new js cssRule object
 
 **_dom.rule(selector, datas)**
@@ -117,6 +125,7 @@ setTimeout(function(){
 + *object* **datas** [optional] : style datas if any.
 **returns** *CSSStyleRule*
 
+<br/>
 
 <u>Exemple :</u>
 
@@ -139,6 +148,7 @@ setTimeout(function(){
 + *object* **datas** : sass like structured object.
 **returns** collection of *CSSStyleRule*
 
+<br/>
 
 <u>Exemple :</u>
 ```javascript

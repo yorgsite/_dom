@@ -9,6 +9,10 @@ A basic but powerful micro library for html &amp; css creation with js.
 + Interacts exclusively with native browser API.
 No proxies or intrusive attributes except for custom models.
 
+<hr/>
+
+<div style="border:solid 1px #00f;"></diV>
+
 ## html
 
 #### Instanciate html elements or structure

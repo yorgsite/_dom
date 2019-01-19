@@ -15,7 +15,7 @@ No proxies or intrusive attributes except for custom models.
 
 
 **_dom(tagName,datas,childs,nameSpace)**
-+ *string* **tagName** : element tagname
++ `string` **tagName** : element tagname
 + *object* **datas** [optional] : element attributes.
 + *Array* **childs** [optional] : element childs. can contain strings an html elements.
 + *string* **nameSpace** [optional] : element namesapace if any.
@@ -44,6 +44,7 @@ document.body.appendChild(div);
 + *function* **constructor** : receive the arguments of _dom but the dont have to respect the nomenclature excepted 'tagName'. Must return an HTMLElement.NB:constructor is scoped to its interface.
 
 <u>Exemple 1 :</u>
+
 declare a new html model :
 
 ```javascript
@@ -51,7 +52,7 @@ declare a new html model :
  * creates an Table of 1 line.
  * @param {string} tagName must be 'table-line'
  * @param {Array} wlist columns widths
- * @param {Array} childlist columns contents (must be of the wlist same length).
+ * @param {Array} childlist columns contents.
  * @returns {HTMLElement}
  */
 _dom.model('table-line',function(tagName,wlist,childlist){
@@ -65,7 +66,11 @@ _dom.model('table-line',function(tagName,wlist,childlist){
 			_dom('tbody',{},[dom_tr])
 		]);
 	};
-	//(interfacing exemple)  use push to add a column.
+	/**
+	 * (interfacing exemple) add a column.
+	 * @param {string|HTMLElement} width  column content (when content is not set) or width
+	 * @param {string|HTMLElement} content  column content
+	 */
 	this.push=function(width,content){
 		if(!content){
 			content=width;
@@ -84,7 +89,8 @@ _dom.model('table-line',function(tagName,wlist,childlist){
 ```
 
 <u>Exemple 2 :</u>
-Instanciates and interact with model :
+
+Instanciates and interact with model interface :
 
 ```javascript
 var tl=_dom('table-line',['1','*'],['000',_dom('div',{},['abc'])]);
@@ -109,6 +115,7 @@ setTimeout(function(){
 
 
 <u>Exemple :</u>
+
 Overide dynamicly css rules:
 ```javascript
 var tableRule=_dom.rule('table',{border:'solid 1px #0f0'});

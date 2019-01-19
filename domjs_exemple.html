@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<script src="_dom.js"></script>
+		<script>
+		window.addEventListener('load',function(){
+
+			var inpt=_dom('input',{type:'text',value:'hello'});
+			document.body.appendChild(inpt);
+
+			_dom.model('table-line',function(tagName,wlist,childlist){
+				var tdlist=[],dom_tr,dom;
+				var build=function(){
+					for(var i=0;i<childlist.length;i++){
+						tdlist.push(_dom('td',{width:(wlist[i]?wlist[i]:'*')},[childlist[i]]));
+					}
+					dom_tr=_dom('tr',{},tdlist);
+					dom= _dom('table',{border:'0',cellPadding:'0',cellSpacing:'0'},[
+						_dom('tbody',{},[dom_tr])
+					]);
+				};
+				this.push=function(width,content){
+					if(!content){
+						content=width;
+						width='*';
+					}
+					if(!(content instanceof HTMLElement)){
+						content=document.createTextNode(content);
+					}
+					var nutd=_dom('td',{width:width},[content]);
+					dom_tr.appendChild(nutd);
+				};
+				build();
+				return dom;
+			});
+
+			var rules =_dom.rules({
+				'table':{
+					border:'solid 1px #0f0',
+					'& td':{
+						'&>div':{
+							border:'solid 1px #f00',
+						}
+					}
+				}
+			});
+			console.log(rules);
+
+
+			var tl=_dom('table-line',['1','*'],['000',_dom('div',{},['abc'])]);
+
+			document.body.appendChild(tl);
+			setTimeout(function(){
+				tl.__dom.push('def');
+				rules.table.style.borderColor='#00f';
+			},2000);
+		});
+		</script>
+	</head>
+	<body >
+
+	</body>
+</html>

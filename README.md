@@ -1,7 +1,5 @@
 
-<style>
 
-</style>
 # _dom
 
 A basic but powerful micro library for html &amp; css creation with js.
@@ -15,7 +13,7 @@ No proxies or intrusive attributes except for custom models.
 
 #### Instanciate html elements or structure
 
-<div></div>
+
 **_dom(tagName,datas,childs,nameSpace)**
 + *string* **tagName** : element tagname
 + *object* **datas** [optional] : element attributes.

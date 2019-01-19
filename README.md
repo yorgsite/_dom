@@ -18,12 +18,12 @@ No proxies or intrusive attributes except for custom models.
 #### Instanciate html elements or structure
 
 
-**_dom(tagName,datas,childs,nameSpace)**
+`_dom(tagName,datas,childs,nameSpace)`
 + `string` **tagName** : element tagname
-+ *object* **datas** [optional] : element attributes.
-+ *Array* **childs** [optional] : element childs. can contain strings an html elements.
-+ *string* **nameSpace** [optional] : element namesapace if any.
-**returns** *HTMLElement*
++ `object` **datas** [optional] : element attributes.
++ `Array` **childs** [optional] : element childs. can contain strings an html elements.
++ `string` **nameSpace** [optional] : element namesapace if any.
+**returns** `HTMLElement`
 
 <br/>
 
@@ -45,9 +45,12 @@ document.body.appendChild(div);
 
 #### Add custom structures to *_dom*
 
-**_dom.model(tagName,constructor)**
-+ *string* **tagName** : the custom element name. Should contain at least one "-" to avoid conflict with natives HTMLElements.
-+ *function* **constructor** : receive the arguments of _dom but the dont have to respect the nomenclature excepted 'tagName'. Must return an HTMLElement.NB:constructor is scoped to its interface.
+`_dom.model(tagName,constructor)`
++ `string` **tagName** : the custom element name.
+Should contain at least one "-" to avoid conflict with natives HTMLElements.
++ `function` **constructor** : Must return an HTMLElement.
+Receive the arguments of _dom but the dont have to respect the nomenclature excepted 'tagName'.
+NB:constructor is scoped to its interface.
 
 <br/>
 
@@ -120,10 +123,10 @@ setTimeout(function(){
 
 #### create a new js cssRule object
 
-**_dom.rule(selector, datas)**
-+ *string* **selector** : the new rule rule query selector.
-+ *object* **datas** [optional] : style datas if any.
-**returns** *CSSStyleRule*
+`_dom.rule(selector, datas)`
++ `string` **selector** : the new rule rule query selector.
++ `object` **datas** [optional] : style datas if any.
+**returns** `CSSStyleRule`
 
 <br/>
 
@@ -144,9 +147,9 @@ setTimeout(function(){
 #### Create rules collection with sass like structures
 
 
-**_dom.rules(datas)**
-+ *object* **datas** : sass like structured object.
-**returns** collection of *CSSStyleRule*
+`_dom.rules(datas)`
++ *object* `datas` : sass like structured object.
+**returns** collection of `CSSStyleRule` by selector.
 
 <br/>
 
@@ -168,3 +171,6 @@ setTimeout(function(){
 },2000);
 
 ```
+<br/>
+
+Have a look at **domjs_exemple.html** for implementation.

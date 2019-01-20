@@ -33,6 +33,10 @@
 				};
 				build();
 				return dom;
+			},{
+				'table td>div':{
+					backgroundColor:'#ff0'
+				}
 			});
 
 			var rules =_dom.rules({
@@ -41,6 +45,8 @@
 					'& td':{
 						'&>div':{
 							border:'solid 1px #f00',
+							display:'block',
+							// backgroundColor:'#ff0'
 						}
 					}
 				}
@@ -53,7 +59,9 @@
 			document.body.appendChild(tl);
 			setTimeout(function(){
 				tl.__dom.push('def');
-				rules.table.style.borderColor='#00f';
+				rules['table'].style.borderColor='#00f';
+				rules['table td>div'].style.color='#00f';
+				tl.__dom.rules['table td>div'].style.backgroundColor='#0ff';
 			},2000);
 		});
 		</script>

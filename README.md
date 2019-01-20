@@ -48,10 +48,12 @@ document.body.appendChild(div);
 `_dom.model(tagName,constructor)`
 + `string` **tagName** : the custom element name.
 Should contain at least one "-" to avoid conflict with natives HTMLElements.
-+ `function` **constructor** : Must return an HTMLElement.
++ `function` **constructor** : Must return an HTMLElement.<br/>
 Receive the arguments of _dom but the dont have to respect the nomenclature excepted 'tagName'.
 NB:constructor is scoped to its interface.
-
++ `object|function` **cssRules** [optional] : is or returns an object describing rules like _dom.rules,
+but the created collection will be insancied only once and shared among interfaces.
+Adds the 'rules' property to the interface.
 <br/>
 
 <u>Exemple 1 :</u>

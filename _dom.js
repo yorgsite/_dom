@@ -5,9 +5,20 @@ var _dom=(function(){
 	// custom elements handling
 	var _modelref='__dom';
 	var _models={};
-	var _Model=function(tagName,constructor){
+	var _Model=function(tagName,constructor,cssRules){
+		var rules;
 		this.tagName	= tagName;
 		this.constructor= constructor;
+		var crcheck={
+
+		};
+		this.cssRules	= typeof(cssRules)==='function'?cssRules:(typeof(cssRules)==='object'?function(){return cssRules;}:0);
+		this.getRules	= function(args){
+			if(this.cssRules&&!rules){
+				rules=_dom.rules(this.cssRules());
+			}
+			return rules;
+		};
 	};
 	_Model.prototype.build=function(args){
 		var inst=this.instance(args);
@@ -23,6 +34,10 @@ var _dom=(function(){
 		var dom=model.constructor.apply(this,args);
 		Object.defineProperty(this,'dom',{get:function(){return dom;}});
 		Object.defineProperty(this,'tagName',{get:function(){return model.tagName;}});
+		if(model.cssRules){
+			var rules=model.getRules();
+			Object.defineProperty(this,'rules',{get:function(){return rules;}});
+		}
 		if(!(dom instanceof HTMLElement)){
 			console.error('-----------------------');
 			console.log('tagName=',model.tagName);
@@ -81,10 +96,15 @@ var _dom=(function(){
 	/**
 	* add a custom element to _dom.
 	* NB: the '__dom' property will be added to the element, pointing to it's interface (model instance).
+	* interface['dom'] : dom element;
+	* interface[tagName] : element tagName;
 	* @param {string} tagName the custom element name. Should contain at least one "-" to avoid conflict with natives HTMLElements.
 	* @param {function} constructor receive the arguments of _dom but the dont have to respect the nomenclature excepted 'tagName'. Must return an HTMLElement.NB:constructor is scoped to its interface.
+	* @param {object|function} [cssRules] is or returns an object describing rules like _dom.rules,
+	but the created collection will be insancied only once and shared among interfaces.
+	Adds the 'rules' property to the interface.
 	*/
-	_dom.model=function(tagName,constructor){
+	_dom.model=function(tagName,constructor,cssRules){
 
 		if(tagName.indexOf('-')===-1){
 			console.warn('_dom.model suspect tagName "'+tagName+'" should contain at least one "-" to avoid conflict with natives HTMLElements.');
@@ -98,7 +118,7 @@ var _dom=(function(){
 			console.log('constructor=',constructor);
 			throw('\n_dom.model Error:\nconstructor must be a function.');
 		}
-		_models[tagName]=new _Model(tagName,constructor);
+		_models[tagName]=new _Model(tagName,constructor,cssRules);
 	};
 	/**
 	 * Instanciates a declared model;

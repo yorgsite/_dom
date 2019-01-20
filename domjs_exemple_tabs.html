@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<script src="_dom.js"></script>
+		<script>
+		window.addEventListener('load',function(){
+
+			_dom.model('dom-tabs',function(tagName,className){
+				var list=[];
+				var idcnt=1;
+				var doms={};
+				var build=function(){
+					doms.head=_dom('div',{});
+					doms.body=_dom('div',{});
+					doms.table=_dom('table',{border:'0',cellSpacing:'0',cellPadding:'0',
+					className:'dom-tabs'+(className?' '+className:'')},[
+						_dom('tbody',{},[
+							_dom('tr',{},[
+								_dom('td',{align:'left',height:'1'},[doms.head])
+							]),
+							_dom('tr',{},[
+								_dom('td',{align:'left',vAlign:'top'},[doms.body])
+							])
+						])
+					]);
+				};
+				var Unit=function(label,content){
+					var unit=this;
+					this.id=idcnt++;
+					this.label=_dom('span',{onclick:function(){
+
+						select(unit.myId());
+					}},[label]);
+					this.content=_dom('div',{},[content]);
+					doms.head.appendChild(this.label);
+					doms.body.appendChild(this.content);
+					this.myId=function(){
+						for(var i=0;i<list.length;i++){
+							if(list[i].id===this.id){
+								return i;
+							}
+						}
+						return -1;
+					};
+				};
+				var select=function(id){
+					list.map((d,i)=>{
+						d.label.className=
+						d.content.className=(i===id?'selected':'');
+					});
+				};
+				this.add=function(label,content){
+					list.push(new Unit(label,content));
+					select(list.length-1);
+				};
+				build();
+				return doms.table;
+			},{
+				'.dom-tabs':{
+					backgroundColor:'#ffd',
+					'&>tbody':{
+						'&>tr:first-child>td>div':{
+							padding:'2px 2px 0px 2px',
+							'&>span':{
+								display:'inline-block',
+								border:'solid #000',
+								borderWidth:'1px 1px 0px 1px',
+								backgroundColor:'#aaa',
+								margin:'2px 2px 0px 2px',
+								padding:'0px 2px',
+								'&.selected':{
+									backgroundColor:'#fff'
+								}
+							}
+						},
+						'&>tr+tr>td>div':{
+							backgroundColor:'#fff',
+							border:'solid 1px #000',
+							'&>div':{
+								display:'none',
+								'&.selected':{
+									display:'block'
+								}
+							}
+						}
+					}
+				}
+			});
+
+
+
+			var tl=_dom('dom-tabs');
+			tl.style.display='inlne-block';
+			tl.style.minWidth='200px';
+			tl.style.minHeight='200px';
+
+			tl.__dom.add('some text','blablabla');
+			tl.__dom.add('an input',_dom('input',{type:'text',value:'hello'}));
+			tl.__dom.add('an area',_dom('textarea',{value:'hello'}));
+			document.body.appendChild(tl);
+		});
+		</script>
+	</head>
+	<body >
+
+	</body>
+</html>

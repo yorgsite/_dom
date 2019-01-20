@@ -174,7 +174,16 @@ var _dom=(function(){
 		var rules={},names,selector;
 		var collect=function(ldata,name,pile){
 			selector=pile.join('')+name;
-			rules[selector]=_dom.rule(selector,collect.level(ldata));
+			var alias,level=collect.level(ldata);
+			if(level.alias){
+				alias=level.alias;
+				delete level['alias'];
+			}
+			rules[selector]=_dom.rule(selector,level);
+			if(alias){
+				console.log('alias',alias);
+				rules[alias]=rules[selector];
+			}
 			names=name.split(',');
 			for(var i=0;i<names.length;i++){
 				collect.childs(ldata,names[i],pile.concat([names[i]]));

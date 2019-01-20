@@ -20,11 +20,14 @@ var _dom=(function(){
 	};
 
 	_Model.Instance=function(model,args){
-		this.dom=model.constructor.apply(this,args);
-		if(!(this.dom instanceof HTMLElement)){
+		var dom=model.constructor.apply(this,args);
+		Object.defineProperty(this,'dom',{get:function(){return dom;}});
+		Object.defineProperty(this,'tagName',{get:function(){return model.tagName;}});
+		if(!(dom instanceof HTMLElement)){
+			console.error('-----------------------');
 			console.log('tagName=',model.tagName);
 			console.log('constructor=',model.constructor);
-			console.log('this.dom=',this.dom);
+			console.log('this.dom=',dom);
 			throw('\n_dom.model Error:\nconstructor must return an HTMLElement.');
 		}
 
@@ -41,8 +44,9 @@ var _dom=(function(){
 	 * @returns {HTMLElement}
 	 */
 	_dom=function(tagName,datas,childs,nameSpace){
+		var args=arguments;
 		if(tagName in _models){
-			return _models[tagName].build(arguments);
+			return _models[tagName].build(args);
 		}
 	    try{
 	        var node = typeof(nameSpace)==="string"?
@@ -59,13 +63,20 @@ var _dom=(function(){
 	        if(childs && typeof(childs.length)==='number'){
 	            for(var i=0;i<childs.length;i++){
 	                if(typeof(childs[i])==="string")node.appendChild(document.createTextNode(childs[i]));
-	                else try{node.appendChild(childs[i]);}catch(e){console.log(childs[i],e);throw("parameter childs["+i+"]="+childs[i]+" must be string or dom element.");}
+	                else try{node.appendChild(childs[i]);}catch(e){
+						console.error('-----------------------');
+						console.log('childs['+i+']=',childs[i]);
+						console.log('error=',e);
+						throw("parameter childs["+i+"] must be string or dom element.");}
 	            }
 	        }
 	   }catch(err){
+		   console.error('----------_dom Error');
+		   console.log('arguments=',args);
+		   console.log('error=',err);
 	       throw("_dom Error:\n"+err+"");
 	   }
-	    return node;
+	   return node;
 	};
 	/**
 	* add a custom element to _dom.
@@ -82,6 +93,7 @@ var _dom=(function(){
 			throw('\n_dom.model Error:\ntagName "'+tagName+'" allready exists.');
 		}
 		if(typeof(constructor)!=='function'){
+			console.error('----------_dom.model Error');
 			console.log('tagName=',tagName);
 			console.log('constructor=',constructor);
 			throw('\n_dom.model Error:\nconstructor must be a function.');
@@ -97,6 +109,8 @@ var _dom=(function(){
 	 */
 	_dom.instance=function(tagName,whatever__){
 		if(!(tagName in _models)){
+			console.error('----------_dom.instance Error');
+			console.log('arguments=',arguments);
 			throw('\n_dom.instance Error:\ntagName "'+tagName+'" not found in models.');
 		}
 		return _models[tagName].instance(arguments);
@@ -105,11 +119,16 @@ var _dom=(function(){
 	// -------------- css -----------
 	/**
 	 * create a new js cssRule object;
-	 * @param {string} selector the new rule rule query selector.
+	 * @param {string} selector the new rule css query.
 	 * @param {object} [datas] style datas.
 	 * @returns {CSSStyleRule}
 	 */
 	_dom.rule = function (selector, datas) {
+		if(typeof(selector)!=='string'||!selector.length){
+			console.error('----------_dom.rule Error');
+			console.log('selector=',selector);
+			throw('\n_dom.rule Error:\nselector is not a valid css query.');
+		}
 		if (document.styleSheets.length == 0) {
 			var selem = document.createElement('style');
 			selem.appendChild(document.createTextNode(""));

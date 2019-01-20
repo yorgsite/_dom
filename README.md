@@ -45,7 +45,7 @@ document.body.appendChild(div);
 
 #### Add custom structures to *_dom*
 
-`_dom.model(tagName,constructor)`
+`_dom.model(tagName,constructor,cssRules)`
 + `string` **tagName** : the custom element name.
 Should contain at least one "-" to avoid conflict with natives HTMLElements.
 + `function` **constructor** : Must return an HTMLElement.<br/>

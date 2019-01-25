@@ -5,9 +5,10 @@
 A basic but powerful light library for html &amp; css creation with js.
 
 + Easy creation of html elements and css rules.
++ Interacts exclusively with native browser API.<br/>
+No time comsuming proxies.<br/>
+No intrusive attributes except for templates (see **_dom.model**).
 + Full html templating.
-+ Interacts exclusively with native browser API.
-No proxies or intrusive attributes except for custom models.
 
 <hr/>
 

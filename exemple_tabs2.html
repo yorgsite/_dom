@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<script src="_dom.js"></script>
+		<script src="exemple_dom-tabs.component.js"></script>
+		<script>
+		// css
+		_dom.rules({
+			'.tabs-a,.tabs-b':{
+				'&>tbody':{
+					'&>tr:first-child>td>div':{
+						'&>span':{
+							display:'inline-block',
+							backgroundColor:'#aaa',
+							transition:'all 0.7s ease',
+							cursor:'pointer',
+							'&.selected':{
+								transform: 'translate(0px,1px)',
+								backgroundColor:'#fff'
+							}
+						}
+					},
+					'&>tr+tr>td>div':{
+						backgroundColor:'#fff',
+						minHeight:'100px'
+					}
+				}
+			},
+			'.tabs-a':{
+				'&>tbody':{
+					'&>tr:first-child>td>div':{
+						padding:'2px 8px 0px 8px',
+						'&>span':{
+							border:'solid #000',
+							borderRadius:'5px 5px 0px 0px',
+							borderWidth:'2px 2px 0px 2px',
+							margin:'2px 4px 0px 4px',
+							padding:'0px 5px',
+							fontSize:'20px',
+							fontWeight:'bold',
+							cursor:'pointer',
+							fontVariant:'small-caps',
+							color:'#666',
+							'&.selected':{
+								color:'#000',
+								transform: 'translate(0px,2px)',
+								boxShadow:'inset 0px 1px 2px #888'
+							},
+							'&:hover':{
+								color:'#fff',
+								textShadow:'0px 0px 2px #000,2px 1px 2px #000'
+							}
+						}
+					},
+					'&>tr+tr>td>div':{
+						borderRadius:'5px',
+						border:'solid #000 2px',
+						padding:'10px'
+					}
+				}
+			},
+			'.tabs-b':{
+				'&>tbody':{
+					'&>tr:first-child>td>div':{
+						padding:'4px 2px 0px 4px',
+						'&>span':{
+							border:'solid #037',
+							borderWidth:'1px 1px 0px 1px',
+							margin:'2px 2px 0px 2px',
+							padding:'0px 4px 2px 4px',
+							color: '#567',
+							backgroundColor:'#9ab',
+							'&.selected':{
+								color: '#06a',
+								backgroundColor:'#fff',
+								padding:'0px 6px 2px 6px'
+							},
+							'&:hover':{
+								textDecoration: 'underline'
+							}
+						}
+					},
+					'&>tr+tr>td>div':{
+						border:'solid #037 1px',
+						padding:'5px',
+						boxShadow:'5px 3px 8px #9ab'
+					}
+				}
+			}
+		});
+		</script>
+
+		<script>
+
+
+
+
+
+			var rand_tabs={
+				'text':function(__dom){
+					return randtext(20,1).join('');
+				},
+				'html':function(__dom){
+					return _dom('span',{innerHTML:randtext(30,5).join('<br/>')});
+				},
+				'input':function(__dom){
+					return _dom('input',{type:'text',value:randtext(20,1).join('')});
+				},
+				'area':function(__dom){
+					return _dom('textarea',{value:randtext(20,5).join('\n')});
+				}
+			};
+			var randtchars=function(cols,rows,from,nb){
+
+				return new Array(Math.ceil(1+0.5*(1+Math.random())*(rows||1)))
+				.join('.').split('.').map(function(d){
+					return new Array(Math.round(1+0.5*(1+Math.random())*cols)).join('.')
+					.split('.').map(function(d){
+						return String.fromCharCode(Math.round(from+Math.random()*nb));
+					}).join('');
+				});
+			};
+			var randtext=function(cols,rows){
+				return randtchars(cols,rows,30,100);
+			};
+			// var randname=function(){
+			// 	var cons="",voy="";
+			// };
+			var randtab=function(__dom){
+				var keys=Object.keys(rand_tabs);
+				var key=keys[Math.floor(keys.length*Math.random())];
+				var id=Math.floor(1000*Math.random());
+				__dom.add('rand '+key+' '+id,rand_tabs[key]());
+			};
+
+			var nb_a=4,
+				nb_b=6,
+				tl_root;
+			var app=function(){
+				tl_root=[
+					_dom('dom-tabs','tabs-a','tabsA'),
+					_dom('dom-tabs','tabs-a','tabsA')
+				];
+				for(var r=0;r<tl_root.length;r++){
+					for(var i=0,content;i<nb_a;i++){
+						content=_dom('dom-tabs','tabs-b','tabsB');
+						for(var j=0;j<nb_b;j++){
+							randtab(content.__dom);
+						}
+						tl_root[r].__dom.add('Main Tab '+(r*nb_a+i),content);
+					}
+					document.body.appendChild(tl_root[r]);
+				}
+			};
+
+			window.addEventListener('load',app);
+		</script>
+	</head>
+	<body >
+	</body>
+</html>

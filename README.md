@@ -177,7 +177,6 @@ setTimeout(function(){
 <br/>
 <hr/>
 
-A digest of the preceeding exemples can be found in **domjs_exemple.html**.
+A digest of the preceeding exemples can be found in **exemple.html**.
 
-No framework constraints with templating.
-Have a look at **domjs_exemple_tabs.html** for how to make a component.
+Have a look at **exemple_tabs.html** and  **exemple_tabs2.html** for how to make app and component.

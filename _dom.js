@@ -153,7 +153,7 @@ var _dom=(function(){
 		if (document.styleSheets.length == 0) {
 			var selem = document.createElement('style');
 			selem.appendChild(document.createTextNode(""));
-			document.body.appendChild(selem);
+			document.documentElement.appendChild(selem);
 		}
 		var sheet = document.styleSheets[document.styleSheets.length - 1];
 		sheet.insertRule(selector + "{\n\n}", sheet.cssRules.length);

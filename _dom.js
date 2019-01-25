@@ -69,9 +69,10 @@ var _dom=(function(){
 	            document.createElement(tagName);
 	        var dataAssign=function(tgt,src,dataname){
 	            if(typeof(tgt)==="undefined")throw("property '"+dataname+"' doesn't exist.");
-	            for(var i in src){
-	                if(typeof(src[i])==="object")	dataAssign(tgt[i],src[i],dataname+"."+i);
-	                else				tgt[i] = src[i];
+				for(var i in src){
+					if(typeof(src[i])==="object")
+					dataAssign(tgt[i],src[i],dataname+"."+i)
+					else tgt[i] = src[i];
 	            }
 	         };
 	        dataAssign(node,datas,(""+tagName).toUpperCase());
@@ -170,47 +171,44 @@ var _dom=(function(){
 	 * @param {object} datas sass like structured object
 	 * @returns {collection of CSSStyleRule}
 	 */
-	_dom.rules	= function(data){
-		var rules={},names,selector;
-		var collect=function(ldata,name,pile){
-			selector=pile.join('')+name;
-			var alias,level=collect.level(ldata);
-			if(level.alias){
-				alias=level.alias;
-				delete level['alias'];
-			}
-			rules[selector]=_dom.rule(selector,level);
-			if(alias){
-				console.log('alias',alias);
-				rules[alias]=rules[selector];
-			}
-			names=name.split(',');
-			for(var i=0;i<names.length;i++){
-				collect.childs(ldata,names[i],pile.concat([names[i]]));
-			}
-		};
-		collect.level=function(ldata){
-			var obj={};
-			for(var prop in ldata){
-				if(prop.charAt(0)!=='&'){
-					obj[prop]=ldata[prop];
-				}
-			}
-			return obj;
-		};
-		collect.childs=function(ldata,name,pile){
-			var obj={};
-			for(var prop in ldata){
-				if(prop.charAt(0)==='&'){
-					collect(ldata[prop],prop.substr(1),pile);
-				}
-			}
-		};
-		for(var name in data){
-			collect(data[name],name,[]);
-		}
-		return rules;
-	};
+	 _dom.rules	= function(data){
+ 		var rules={};
+ 		var collect=function(ldata,name,pile){
+ 			var alias,level=collect.level(ldata);
+ 			if(level.alias){
+ 				alias=level.alias;
+ 				delete level['alias'];
+ 			}
+ 			var names=name.split(',');
+ 			for(var i=0;i<names.length;i++){
+ 				var selector=pile.join('')+names[i];				rules[selector]=_dom.rule(selector,level);
+ 				if(alias&&i===0){rules[alias]=rules[selector];}
+ 				collect.childs(ldata,pile.concat([names[i]]));
+ 			}
+ 		};
+ 		collect.level=function(ldata){
+ 			var obj={};
+ 			for(var prop in ldata){
+ 				if(prop.charAt(0)!=='&'){
+ 					obj[prop]=ldata[prop];
+ 				}
+ 			}
+ 			return obj;
+ 		};
+ 		collect.childs=function(ldata,pile){
+ 			var obj={};
+ 			for(var prop in ldata){
+ 				if(prop.charAt(0)==='&'){
+ 					collect(ldata[prop],prop.substr(1),pile);
+ 				}
+ 			}
+ 		};
+
+ 		for(var name in data){
+ 			collect(data[name],name,[]);
+ 		}
+ 		return rules;
+ 	};
 
 	return _dom;
 })();

@@ -13,7 +13,8 @@
 				var tdlist=[],dom_tr,dom;
 				var build=function(){
 					for(var i=0;i<childlist.length;i++){
-						tdlist.push(_dom('td',{width:(wlist[i]?wlist[i]:'*')},[childlist[i]]));
+						// tdlist.push(_dom('td',{width:(wlist[i]?wlist[i]:'*'),style:{color:'#880'}},[childlist[i]]));
+						tdlist.push(_dom('td',{width:(wlist[i]?wlist[i]:''),style:{color:'#880'}},[childlist[i]]));
 					}
 					dom_tr=_dom('tr',{},tdlist);
 					dom= _dom('table',{border:'0',cellPadding:'0',cellSpacing:'0'},[
@@ -23,7 +24,7 @@
 				this.push=function(width,content){
 					if(!content){
 						content=width;
-						width='*';
+						width='';
 					}
 					if(!(content instanceof HTMLElement)){
 						content=document.createTextNode(content);
@@ -44,9 +45,8 @@
 					}
 				}
 			});
-
 			var rules =_dom.rules({
-				'table':{
+				'table,div':{
 					border:'solid 1px #0f0',
 					'& td':{
 						'&>div':{
@@ -59,8 +59,7 @@
 			});
 			console.log(rules);
 
-
-			var tl=_dom('table-line',['1','*'],['000',_dom('div',{},['abc'])]);
+			var tl=_dom('table-line',['1',''],['000',_dom('div',{},['abc'])]);
 
 			document.body.appendChild(tl);
 			setTimeout(function(){

@@ -45,7 +45,7 @@
 					};
 				};
 				var select=function(id){
-					list.map((d,i)=>{
+					list.map(function(d,i){
 						d.label.className=
 						d.content.className=(i===id?'selected':'');
 					});
@@ -68,16 +68,21 @@
 								backgroundColor:'#aaa',
 								margin:'2px 2px 0px 2px',
 								padding:'0px 2px',
+								cursor:'pointer',
 								'&.selected':{
 									transform: 'translate(0px,1px)',
 									backgroundColor:'#fff'
+								},
+								'&:hover':{
+									textDecoration: 'underline'
 								}
 							}
 						},
 						'&>tr+tr>td>div':{
 							backgroundColor:'#fff',
 							border:'solid 1px #000',
-							padding:'2px',
+							padding:'5px',
+							minHeight:'100px',
 							'&>div':{
 								display:'none',
 								'&.selected':{
@@ -92,14 +97,17 @@
 
 
 			var tl=_dom('dom-tabs');
+			console.log('lllllllll a');
 			tl.style.display='inlne-block';
 			tl.style.minWidth='200px';
 			tl.style.minHeight='200px';
+			console.log('llllllll lb');
 
 			tl.__dom.add('some text','blablabla');
 			tl.__dom.add('an input',_dom('input',{type:'text',value:'hello'}));
 			tl.__dom.add('an area',_dom('textarea',{value:'hello'}));
 			document.body.appendChild(tl);
+			console.log('llllllll c');
 		});
 		</script>
 	</head>

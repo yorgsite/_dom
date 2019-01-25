@@ -97,17 +97,14 @@
 
 
 			var tl=_dom('dom-tabs');
-			console.log('lllllllll a');
 			tl.style.display='inlne-block';
 			tl.style.minWidth='200px';
 			tl.style.minHeight='200px';
-			console.log('llllllll lb');
 
 			tl.__dom.add('some text','blablabla');
 			tl.__dom.add('an input',_dom('input',{type:'text',value:'hello'}));
 			tl.__dom.add('an area',_dom('textarea',{value:'hello'}));
 			document.body.appendChild(tl);
-			console.log('llllllll c');
 		});
 		</script>
 	</head>

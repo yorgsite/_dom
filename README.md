@@ -2,10 +2,10 @@
 
 # _dom
 
-A basic but powerful micro library for html &amp; css creation with js.
+A basic but powerful light library for html &amp; css creation with js.
 
 + Easy creation of html elements and css rules.
-+ Basic templating.
++ Full html templating.
 + Interacts exclusively with native browser API.
 No proxies or intrusive attributes except for custom models.
 
@@ -51,7 +51,7 @@ Should contain at least one "-" to avoid conflict with natives HTMLElements.
 + `function` **constructor** : Must return an HTMLElement.<br/>
 Receive the arguments of _dom but the dont have to respect the nomenclature excepted 'tagName'.<br/>
 NB:constructor is scoped to its interface.
-+ `object|function` **cssRules** [optional] : is or returns an object describing rules like _dom.rules,<br/>
++ `object|function` **cssRules** [optional] : is or returns an object describing rules like _dom.rules,
 but the created collection will be insancied only once and shared among interfaces.<br/>
 Adds the 'rules' property to the interface.
 <br/>
@@ -174,5 +174,9 @@ setTimeout(function(){
 
 ```
 <br/>
+<hr/>
 
-Have a look at **domjs_exemple.html** for implementation.
+A digest of the preceeding exemples can be found in **domjs_exemple.html**.
+
+No framework constraints with templating.
+Have a look at **domjs_exemple_tabs.html** for how to make a component.

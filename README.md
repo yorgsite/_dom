@@ -8,17 +8,22 @@ A light but powerful javascript library for html apps.
 + Interacts exclusively with native browser API.<br/>
 No time comsuming proxies.<br/>
 No code compilation.<br/>
-No intrusive attributes except when using templates (see **_dom.model**).
+No intrusive attributes except when using templates (see [_dom.model](#_dom.model)).
 + Full html templating.
 
-[link](#tg_temlating)
 <hr/>
 
-## html
+[html](#tg_html)
+[Css](#tg_css)
+[Templating](#tg_temlating)
 
 <hr/>
 
-#### Instanciate html elements or structure
+## <a name="tg_html"></a> html
+
+<hr/>
+
+#### <a name="_dom"></a> Instanciate html elements or structure
 
 
 `_dom(tagName,datas,childs,nameSpace)`
@@ -45,11 +50,11 @@ document.body.appendChild(div);
 <br/>
 <hr/>
 
-## css
+## <a name="tg_css"></a> css
 
 <hr/>
 
-#### create a new js cssRule object
+#### <a name="_dom.rule"></a> create a new js cssRule object
 
 `_dom.rule(selector, datas)`
 + `string` **selector** : the new rule rule query selector.
@@ -72,7 +77,7 @@ setTimeout(function(){
 <br/>
 <hr/>
 
-#### Create rules collection with sass like structures
+#### <a name="_dom.rules"></a> Create rules collection with sass like structures
 
 
 `_dom.rules(datas)`
@@ -107,7 +112,7 @@ setTimeout(function(){
 
 <hr/>
 
-#### Add custom structures to *_dom*
+#### <a name="_dom.model"></a> Add custom structures to *_dom*
 
 `_dom.model(tagName,constructor,cssRules)`
 + `string` **tagName** : the custom element name.

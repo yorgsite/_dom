@@ -11,7 +11,7 @@ No code compilation.<br/>
 No intrusive attributes except when using templates (see **_dom.model**).
 + Full html templating.
 
-[link](#head1234)
+[link](#tg_temlating)
 <hr/>
 
 ## html

@@ -11,6 +11,7 @@ No code compilation.<br/>
 No intrusive attributes except when using templates (see **_dom.model**).
 + Full html templating.
 
+[link](#head1234)
 <hr/>
 
 ## html
@@ -40,83 +41,6 @@ var div=_dom('div',{style:{border:'solid 1px #0f0'}},[
 	'ccc'
 ]);
 document.body.appendChild(div);
-```
-<br/>
-<hr/>
-
-
-#### Add custom structures to *_dom*
-
-`_dom.model(tagName,constructor,cssRules)`
-+ `string` **tagName** : the custom element name.
-Should contain at least one "-" to avoid conflict with natives HTMLElements.
-+ `function` **constructor** : Must return an HTMLElement.<br/>
-Receive the arguments of _dom but the dont have to respect the nomenclature excepted 'tagName'.<br/>
-NB:constructor is scoped to its interface.
-+ `object|function` **cssRules** [optional] : is or returns an object describing rules like _dom.rules,
-but the created collection will be insancied only once and shared among interfaces.<br/>
-Adds the 'rules' property to the interface.
-<br/>
-
-<u>Exemple 1 :</u>
-
-declare a new html model :
-
-```javascript
-/**
- * creates an Table of 1 line.
- * @param {string} tagName must be 'table-line'
- * @param {Array} wlist columns widths
- * @param {Array} childlist columns contents.
- * @returns {HTMLElement}
- */
-_dom.model('table-line',function(tagName,wlist,childlist){
-	var tdlist=[],dom_tr,dom;
-	var build=function(){
-		for(var i=0;i<childlist.length;i++){
-			tdlist.push(_dom('td',{width:(wlist[i]?wlist[i]:'*')},[childlist[i]]));
-		}
-		dom_tr=_dom('tr',{},tdlist);
-		dom= _dom('table',{border:'0',cellPadding:'0',cellSpacing:'0'},[
-			_dom('tbody',{},[dom_tr])
-		]);
-	};
-	/**
-	 * (interfacing exemple) add a column.
-	 * @param {string|HTMLElement} width  column content (when content is not set) or width
-	 * @param {string|HTMLElement} content  column content
-	 */
-	this.push=function(width,content){
-		if(!content){
-			content=width;
-			width='*';
-		}
-		if(!(content instanceof HTMLElement)){
-			content=document.createTextNode(content);
-		}
-		var nutd=_dom('td',{width:width},[content]);
-		dom_tr.appendChild(nutd);
-	};
-	build();
-	return dom;
-});
-
-```
-
-<br/>
-
-<u>Exemple 2 :</u>
-
-Instanciates and interact with model interface :
-
-```javascript
-var tl=_dom('table-line',['1','*'],['000',_dom('div',{},['abc'])]);
-
-document.body.appendChild(tl);
-setTimeout(function(){
-	tl.__dom.push('def');
-},2000);
-
 ```
 <br/>
 <hr/>
@@ -175,6 +99,89 @@ setTimeout(function(){
 },2000);
 
 ```
+
+<br/>
+<hr/>
+
+## <a name="tg_temlating"></a> Templating
+
+<hr/>
+
+#### Add custom structures to *_dom*
+
+`_dom.model(tagName,constructor,cssRules)`
++ `string` **tagName** : the custom element name.
+Should contain at least one "-" to avoid conflict with natives HTMLElements.
++ `function` **constructor** : Must return an HTMLElement.<br/>
+Receive the arguments of _dom but the dont have to respect the nomenclature excepted 'tagName'.<br/>
+NB:constructor is scoped to its interface.
++ `object|function` **cssRules** [optional] : is or returns an object describing rules like _dom.rules,
+but the created collection will be insancied only once and shared among interfaces.<br/>
+Adds the 'rules' property to the interface.
+<br/>
+
+<u>Exemple :</u>
+
+
+```javascript
+/**
+ * creates an Table of 1 line.
+ * @param {string} tagName must be 'table-line'
+ * @param {Array} wlist columns widths
+ * @param {Array} childlist columns contents.
+ * @returns {HTMLElement}
+ */
+_dom.model('table-line',function(tagName,wlist,childlist){
+	var tdlist=[],dom_tr,dom;
+	var build=function(){
+		for(var i=0;i<childlist.length;i++){
+			tdlist.push(_dom('td',{width:(wlist[i]?wlist[i]:'*')},[childlist[i]]));
+		}
+		dom_tr=_dom('tr',{},tdlist);
+		dom= _dom('table',{border:'0',cellPadding:'0',cellSpacing:'0'},[
+			_dom('tbody',{},[dom_tr])
+		]);
+	};
+	/**
+	 * (interfacing exemple) add a column.
+	 * @param {string|HTMLElement} width  column content (when content is not set) or width
+	 * @param {string|HTMLElement} content  column content
+	 */
+	this.push=function(width,content){
+		if(!content){
+			content=width;
+			width='*';
+		}
+		if(!(content instanceof HTMLElement)){
+			content=document.createTextNode(content);
+		}
+		var nutd=_dom('td',{width:width},[content]);
+		dom_tr.appendChild(nutd);
+	};
+	build();
+	return dom;
+});
+
+```
+
+<br/>
+<hr/>
+#### Instanciates and interact with model interface
+
+<u>Exemple :</u>
+
+Instanciates and interact with model interface :
+
+```javascript
+var tl=_dom('table-line',['1','*'],['000',_dom('div',{},['abc'])]);
+
+document.body.appendChild(tl);
+setTimeout(function(){
+	tl.__dom.push('def');
+},2000);
+
+```
+
 <br/>
 <hr/>
 

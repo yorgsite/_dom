@@ -2,20 +2,18 @@
 
 # _dom
 
-A light but powerful javascript library for html apps.
+A light but powerful javascript library for html apps.</br>
+It have ben designed to be minimalist
 
-+ Easy creation of html elements and css rules.
-+ Interacts exclusively with native browser API.<br/>
++ Easy creation of [html](#tg_html) elements and [css](#tg_css) rules.
++ Use sass like syntax to optimise your css [rules](#_dom.rules).
++ Interacts exclusively with native browser methods.<br/>
 No time comsuming proxies.<br/>
 No code compilation.<br/>
-No intrusive attributes except when using templates (see [_dom.model](#_dom.model)).
-+ Full html templating.
+No intrusive attributes (except for templates, see [_dom.model](#_dom.model)).
++ Full html [templating](#tg_temlating).<br/>
+Low template architecture constraints.
 
-<hr/>
-
-[html](#tg_html)
-[Css](#tg_css)
-[Templating](#tg_temlating)
 
 <hr/>
 
@@ -190,6 +188,6 @@ setTimeout(function(){
 <br/>
 <hr/>
 
-A digest of the preceeding exemples can be found in **exemple.html**.
+A digest of the preceeding exemples can be found in **[exemple.html](exemples/exemple.html)**.
 
 Have a look at **exemple_tabs.html** and  **exemple_tabs2.html** for how to make app and component.

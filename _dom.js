@@ -9,9 +9,6 @@ var _dom=(function(){
 		var rules;
 		this.tagName	= tagName;
 		this.constructor= constructor;
-		var crcheck={
-
-		};
 		this.cssRules	= typeof(cssRules)==='function'?cssRules:(typeof(cssRules)==='object'?function(){return cssRules;}:0);
 		this.getRules	= function(args){
 			if(this.cssRules&&!rules){
@@ -22,8 +19,12 @@ var _dom=(function(){
 	};
 	_Model.prototype.build=function(args){
 		var inst=this.instance(args);
+		// keeps reference to inherited instance
+		if(inst.dom[_modelref]){
+			inst._super=inst.dom[_modelref];
+		}
 		// keeps reference to constructor scope
-		Object.defineProperty(inst.dom,_modelref,{get:function(){return inst;}});
+		Object.defineProperty(inst.dom,_modelref,{get:function(){return inst;},configurable:true});
 		return inst.dom;
 	};
 	_Model.prototype.instance=function(args){
@@ -31,13 +32,14 @@ var _dom=(function(){
 	};
 
 	_Model.Instance=function(model,args){
-		var dom=model.constructor.apply(this,args);
+		var dom;
 		Object.defineProperty(this,'dom',{get:function(){return dom;}});
 		Object.defineProperty(this,'tagName',{get:function(){return model.tagName;}});
 		if(model.cssRules){
 			var rules=model.getRules();
 			Object.defineProperty(this,'rules',{get:function(){return rules;}});
 		}
+		dom=model.constructor.apply(this,args);
 		if(!(dom instanceof HTMLElement)){
 			console.error('-----------------------');
 			console.log('tagName=',model.tagName);
@@ -123,7 +125,8 @@ var _dom=(function(){
 	};
 	/**
 	 * Instanciates a declared model;
-	 * You should instead use _dom and refer to the result '__dom' attribute.
+	 * Useful if you dont want of the '__dom' property in your html element.
+	 * If not, you should instead use _dom and refer to the result '__dom' attribute.
 	 * @param {string} tagName
 	 * @param {...} ___ whatever arguments the model constructor uses
 	 * @returns {ModelInstance} an object with the 'dom' property as the root HTMLElement.

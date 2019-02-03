@@ -2,8 +2,10 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<script src="_dom.js"></script>
-		<script src="exemple_dom-tabs.component.js"></script>
+		<title>Tabs component exemple</title>
+		<script src="../_dom.js"></script>
+		<script src="components/dom-tabs.component.js"></script>
+		<script src="js/DragPipe.js"></script>
 		<script>
 		// css
 		_dom.rules({
@@ -102,7 +104,7 @@
 					return randtext(20,1).join('');
 				},
 				'html':function(__dom){
-					return _dom('span',{innerHTML:randtext(30,5).join('<br/>')});
+					return _dom('span',{innerHTML:randhtml(30,5)});
 				},
 				'input':function(__dom){
 					return _dom('input',{type:'text',value:randtext(20,1).join('')});
@@ -121,12 +123,37 @@
 					}).join('');
 				});
 			};
+			var randhtmltag=function(txt){
+				var tags=['b','u','i','span style="color:#f00;"',
+				'span style="color:#0A0;"','span style="color:#00f;"'];
+				var tag=tags[Math.floor(Math.random()*tags.length)];
+				return '<'+tag+'>'+txt+'</'+tag.split(' ').shift()+'>';
+			};
+			var randhtml=function(cols,rows){
+				var step=0.2;
+				var lines = randtext(30,5);
+				for(var l=0,line,txt,id;l<lines.length;l++){
+					txt=lines[l];
+					line=[];
+					while(txt.length){
+						id=Math.min(txt.length,1+Math.floor(Math.random()*lines[l].length*step));
+						line.push(txt.substr(0,id));
+						txt=txt.substr(id);
+					}
+					if(line.length%2===0){
+						line[line.length-2]=line.pop();
+					}
+					txt=line.shift();
+					while(line.length){
+						txt+=randhtmltag(line.shift())+line.shift();
+					}
+					lines[l]=txt;
+				}
+				return lines.join('<br/>');
+			};
 			var randtext=function(cols,rows){
 				return randtchars(cols,rows,30,100);
 			};
-			// var randname=function(){
-			// 	var cons="",voy="";
-			// };
 			var randtab=function(__dom){
 				var keys=Object.keys(rand_tabs);
 				var key=keys[Math.floor(keys.length*Math.random())];
@@ -157,6 +184,7 @@
 			window.addEventListener('load',app);
 		</script>
 	</head>
-	<body >
+	<body>
+		<div>use drag and drop to switch tabs of the same type</div>
 	</body>
 </html>

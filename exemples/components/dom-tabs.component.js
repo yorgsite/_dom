@@ -1,24 +1,5 @@
 
 
-		var DragPipe=new function(){
-			var idcnt=1;
-			var datas={};
-			var transfer_id='dragpipe';
-			this.drag=function(evt,data){
-				var _id=''+(idcnt++);
-				datas[_id]=data;
-				evt.dataTransfer.setData(transfer_id,_id);
-			};
-			this.drop=function(evt){
-				evt.preventDefault();
-				var _id=evt.dataTransfer.getData(transfer_id);
-				if(_id in datas){
-					var data=datas[_id];
-					delete datas[_id];
-					return data;
-				}
-			};
-		}();
 
 		(function(){
 			/**
@@ -49,6 +30,8 @@
 				};
 				Object.defineProperty(this,'familly',{get:function(){return familly;}});
 				Object.defineProperty(this,'doms',{get:function(){return doms;}});
+				Object.defineProperty(this,'length',{get:function(){return list.length;}});
+				console.log('dom-tabs scope.familly',scope.familly,' familly',familly);
 				var byId=function(id){
 					for(var i=0;i<list.length;i++){
 						if(list[i].id===id){
@@ -57,13 +40,31 @@
 					}
 					return -1;
 				};
-				var select=function(id){
-					list.map(function(d,i){
-						d.label.className=
-						d.content.className=(i===id?'selected':'');
-					});
+				var byAny=function(any){
+					if(typeof(any)==='number'){
+						return byId(any);
+					}else if(any instanceof Unit){
+						return byId(any.id);
+					}else if(typeof(any)==='function'){
+						var res=list.filter(function(d,i){return any(d)});
+						if(res.length){
+							return byId(res.shift().id);
+						}
+					}
+					return -1;
+				};
+				var select=function(index){
+					if(typeof(index)==='number'){
+						list.map(function(d,i){
+							d.doms.label.className=
+							d.doms.content.className=(i===index?'selected':'');
+						});
+					}else{
+						select(byAny(index));
+					}
 				};
 				this.byId=byId;
+				this.byAny=byAny;
 				this.select=select;
 
 
@@ -72,31 +73,28 @@
 				@param {Unit|HTMLElement|string} label : the label of the tab unit.
 				@returns {Unit} the removed unit if found.
 				*/
-				this.add=function(label,content){
+				this.add=function(label,content,index){
+					var unit,index;
 					if(label instanceof Unit){
-						var unit=label;
+						unit=label;
 						if(unit.tabs){
 							unit.remove();
 						}
 						unit.tabs=scope;
-						if(typeof(content)==='number'&&content<list.length){
-							// console.log(content,list,list[content],unit);
-							doms.head.insertBefore(unit.label,list[content].label);
-							doms.body.appendChild(unit.content);
-							list.splice(content,0,unit);
-							select(content);
-						}else{
-							list.push(unit);
-							doms.head.appendChild(unit.label);
-							doms.body.appendChild(unit.content);
-							select(list.length-1);
-						}
 					}else{
-						list.push(new Unit(label,content,scope));
-						select(list.length-1);
+						unit = new Unit(label,content,scope);
 					}
-
-					return list[list.length-1];
+					if(typeof(index)==='number'&&index<list.length){
+						doms.head.insertBefore(unit.doms.label,list[index].doms.label);
+						doms.body.appendChild(unit.doms.content);
+						list.splice(index,0,unit);
+					}else{
+						list.push(unit);
+						doms.head.appendChild(unit.doms.label);
+						doms.body.appendChild(unit.doms.content);
+					}
+					select(byId(unit.id));
+					return unit;
 				};
 				/**
 				removes a tab unit
@@ -107,8 +105,8 @@
 					var rid = byId((id instanceof Unit)?id.id:id);
 					if(rid>-1){
 						var unit=list.splice(rid,1)[0];
-						doms.head.removeChild(unit.label);
-						doms.body.removeChild(unit.content);
+						doms.head.removeChild(unit.doms.label);
+						doms.body.removeChild(unit.doms.content);
 						unit.tabs=0;
 						if(unit.selected()&&list.length){
 							select(list.length-1);
@@ -141,39 +139,40 @@
 				var unit=this;
 				this.tabs=tabs;
 				this.id=idcnt++;
-				var dd_id;
-				this.label=_dom('span',{
-					draggable:1,
-					ondragstart:function(evt){
-						dd_id=DragPipe.drag(evt,{
-							unit:unit
-						});
-					},
-					ondragover:function(evt){evt.preventDefault();},
-					ondrop:function(evt){
-						var data = DragPipe.drop(evt);
-						// console.log(data);
-						if(data.unit instanceof Unit){
-							if(data.unit.tabs.familly===unit.tabs.familly){
-								var id_to=unit.byId();
-								if(unit.tabs===data.unit.tabs){
-									var id_from=data.unit.byId();
-									data.unit.remove();
-									unit.tabs.add(data.unit,id_to>id_from?id_to:id_to);
-								}else{
-									data.unit.remove();
-									unit.tabs.add(data.unit,id_to);
-								}
-							}
-						}
-					 },
+				this.label=label;
+				this.content=content;
+				this.doms={};
+				this.doms.label=_dom('span',{
 					onclick:function(){
 						unit.tabs.select(unit.tabs.byId(unit.id));
 					}
 				},[label]);
-				this.content=_dom('div',{},[content]);
-				unit.tabs.doms.head.appendChild(this.label);
-				unit.tabs.doms.body.appendChild(this.content);
+				if(unit.tabs.familly && DragPipe){
+					DragPipe.registerDrag(this.doms.label,function(){
+						return {
+							unit:unit
+						};
+					});
+					DragPipe.registerDrop(this.doms.label,function(data){
+						if(data.unit instanceof Unit){
+							// if(data.unit.tabs.length===1)return;
+							if(data.unit.tabs.length>1&&data.unit.tabs.familly===unit.tabs.familly){
+								var id_to=unit.byId();
+								if(unit.tabs===data.unit.tabs){
+									var id_from=data.unit.byId();
+									data.unit.remove();
+									unit.tabs.add(data.unit,0,id_to>id_from?id_to:id_to);
+								}else{
+									data.unit.remove();
+									unit.tabs.add(data.unit,0,id_to);
+								}
+							}
+						}
+					});
+				}
+
+				this.doms.content=_dom('div',{},[content]);
+
 				this.remove=function(){
 					unit.tabs.remove(unit.id);
 				};
@@ -181,7 +180,7 @@
 					return unit.tabs.byId(unit.id);
 				};
 				this.selected=function(){
-					return unit.label.className.indexOf('selected')>-1;
+					return unit.doms.label.className.indexOf('selected')>-1;
 				};
 			};
 		})();

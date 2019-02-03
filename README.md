@@ -2,12 +2,13 @@
 
 # _dom
 
-A basic but powerful light library for html &amp; css creation with js.
+A light but powerful javascript library for html apps.
 
 + Easy creation of html elements and css rules.
 + Interacts exclusively with native browser API.<br/>
 No time comsuming proxies.<br/>
-No intrusive attributes except for templates (see **_dom.model**).
+No code compilation.<br/>
+No intrusive attributes except when using templates (see **_dom.model**).
 + Full html templating.
 
 <hr/>

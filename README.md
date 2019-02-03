@@ -2,8 +2,10 @@
 
 # _dom
 
-A light but powerful javascript library for html apps.</br>
-It have ben designed to be minimalist
+#### A light but powerful javascript library for html apps.</br>
+
+The purpose of **_dom.js** is to work on the lower level possible, with confort, to keep open the integration architecture used by the developper.<br/>
+It is exclusively focused on html and css creation.
 
 + Easy creation of [html](#tg_html) elements and [css](#tg_css) rules.
 + Use sass like syntax to optimise your css [rules](#_dom.rules).
@@ -14,7 +16,19 @@ No intrusive attributes (except for templates, see [_dom.model](#_dom.model)).
 + Full html [templating](#tg_temlating).<br/>
 Low template architecture constraints.
 
+<hr/>
 
+## <a name="tg_menu"></a> Menu
+
++ [Html](#tg_html)
+	+ [_dom](#_dom)
++ [Css](#tg_css)
+	+ [_dom.rule](#_dom.rule)
+	+ [_dom.rules](#_dom.rules)
++ [Templating](#tg_temlating)
+	+ [_dom.model](#_dom.model)
+	+ [Instanciates and interact with model](#tg_instanciate)
++ [Exemples](#tg_exemples)
 <hr/>
 
 ## <a name="tg_html"></a> html
@@ -52,7 +66,7 @@ document.body.appendChild(div);
 
 <hr/>
 
-#### <a name="_dom.rule"></a> create a new js cssRule object
+#### <a name="_dom.rule"></a> create dynamics css rules.
 
 `_dom.rule(selector, datas)`
 + `string` **selector** : the new rule rule query selector.
@@ -63,7 +77,6 @@ document.body.appendChild(div);
 
 <u>Exemple :</u>
 
-Overide dynamicly css rules:
 ```javascript
 var tableRule=_dom.rule('table',{border:'solid 1px #0f0'});
 
@@ -91,6 +104,7 @@ var rules =_dom.rules({
 		border:'solid 1px #0f0',
 		'& td':{
 			'&>div':{
+				alias:'subdiv',
 				border:'solid 1px #f00',
 			}
 		}
@@ -99,6 +113,7 @@ var rules =_dom.rules({
 
 setTimeout(function(){
 	rules.table.style.borderColor='#00f';
+	rules.subdiv.style.color='#d06';
 },2000);
 
 ```
@@ -169,7 +184,8 @@ _dom.model('table-line',function(tagName,wlist,childlist){
 
 <br/>
 <hr/>
-#### Instanciates and interact with model interface
+
+#### <a name="tg_instanciate"></a> Instanciates and interact with model interface
 
 <u>Exemple :</u>
 
@@ -188,6 +204,9 @@ setTimeout(function(){
 <br/>
 <hr/>
 
+## <a name="tg_exemples"></a> Exemples
+
 A digest of the preceeding exemples can be found in **[exemple.html](exemples/exemple.html)**.
 
-Have a look at **exemple_tabs.html** and  **exemple_tabs2.html** for how to make app and component.
++ An exemple of simple tabs conponent : **[exemple_tabs.html](exemples/exemple_tabs.html)**.
++ An exemple of a richer tabs conponent : **[exemple_tabs2.html](exemples/exemple_tabs2.html)**.

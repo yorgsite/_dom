@@ -94,7 +94,7 @@ setTimeout(function(){
 
 `_dom.rules(datas)`
 + *object* `datas` : sass like structured object.
-**returns** collection of `CSSStyleRule` by selector.
+**returns** collection of `CSSStyleRule` by selector and aliases.
 
 <br/>
 

@@ -4,7 +4,7 @@
 
 #### A light but powerful javascript library for html apps.</br>
 
-The purpose of **_dom.js** is to work on the lower level possible, with confort, to let the developper free to use it in any web architecture.<br/>
+The purpose of **_dom.js** is to work on the lower level possible, with confort, to let the developper free to use it with any kind of web architecture.<br/>
 It is exclusively focused on html and css creation.
 
 + Ultra light : < 10k uncompiled, < 5k compiled.

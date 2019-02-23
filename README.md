@@ -4,8 +4,7 @@
 
 #### A light but powerful javascript library for html apps.</br>
 
-The purpose of **_dom.js** is to work on the lower level possible, with confort, to let the developper free to use it with any kind of web architecture.<br/>
-It is exclusively focused on html and css creation.
+**_dom.js** is exclusively focused on html and css creation.
 
 + Ultra light : < 10k uncompiled, < 5k compiled.
 + Easy creation of [html](#tg_html) elements and [css](#tg_css) rules.
@@ -16,6 +15,12 @@ It is exclusively focused on html and css creation.
 	+ No intrusive attributes (except when using templates, see [_dom.model](#_dom.model)).
 + Full html [templating](#tg_temlating).<br/>
 Low template architecture constraints.
+
+
+The purposes of **_dom.js** are:
++ Staying simple.
++ Working on the lower level possible.
++ Being integrable with any kind of web architecture.
 
 <hr/>
 

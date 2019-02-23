@@ -101,12 +101,15 @@ setTimeout(function(){
 <u>Exemple :</u>
 ```javascript
 var rules =_dom.rules({
+	'$color1':'#0f0',
+	'$color2':'#f00',
 	'table':{
-		border:'solid 1px #0f0',
+		border:'solid 1px $color1',
 		'& td':{
 			'&>div':{
 				alias:'subdiv',
-				border:'solid 1px #f00',
+				border:'solid 1px $color2',
+				display:'block'
 			}
 		}
 	}

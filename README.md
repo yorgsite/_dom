@@ -7,7 +7,7 @@
 The purpose of **_dom.js** is to work on the lower level possible, with confort, to let the developper free to use it in any web architecture.<br/>
 It is exclusively focused on html and css creation.
 
-+ Ultra light : < 10k uncompiled.
++ Ultra light : < 10k uncompiled, < 5k compiled.
 + Easy creation of [html](#tg_html) elements and [css](#tg_css) rules.
 + Use sass like syntax to optimise your css [rules](#_dom.rules).
 + Interacts exclusively with native browser methods.

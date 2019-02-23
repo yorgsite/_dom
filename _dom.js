@@ -32,14 +32,15 @@ var _dom=(function(){
 	};
 
 	_Model.Instance=function(model,args){
-		var dom;
-		Object.defineProperty(this,'dom',{get:function(){return dom;}});
+		var dom=model.constructor.apply(this,args);
+		if(!(dom in this)){
+			Object.defineProperty(this,'dom',{get:function(){return dom;}});
+		}
 		Object.defineProperty(this,'tagName',{get:function(){return model.tagName;}});
 		if(model.cssRules){
 			var rules=model.getRules();
 			Object.defineProperty(this,'rules',{get:function(){return rules;}});
 		}
-		dom=model.constructor.apply(this,args);
 		if(!(dom instanceof HTMLElement)){
 			console.error('-----------------------');
 			console.log('tagName=',model.tagName);
@@ -108,7 +109,7 @@ var _dom=(function(){
 	Adds the 'rules' property to the interface.
 	*/
 	_dom.model=function(tagName,constructor,cssRules){
-
+		// console.log('add model',arguments);
 		if(tagName.indexOf('-')===-1){
 			console.warn('_dom.model suspect tagName "'+tagName+'" should contain at least one "-" to avoid conflict with natives HTMLElements.');
 		}
@@ -141,6 +142,7 @@ var _dom=(function(){
 	};
 
 	// -------------- css -----------
+
 	/**
 	 * create a new js cssRule object;
 	 * @param {string} selector the new rule css query.
@@ -175,43 +177,96 @@ var _dom=(function(){
 	 * @returns {collection of CSSStyleRule}
 	 */
 	 _dom.rules	= function(data){
- 		var rules={};
- 		var collect=function(ldata,name,pile){
- 			var alias,level=collect.level(ldata);
- 			if(level.alias){
- 				alias=level.alias;
- 				delete level['alias'];
- 			}
- 			var names=name.split(',');
- 			for(var i=0;i<names.length;i++){
- 				var selector=pile.join('')+names[i];				rules[selector]=_dom.rule(selector,level);
- 				if(alias&&i===0){rules[alias]=rules[selector];}
- 				collect.childs(ldata,pile.concat([names[i]]));
- 			}
- 		};
- 		collect.level=function(ldata){
- 			var obj={};
+ 		var rules={},rootVars={};
+ 		var collect=function(ldata,name,pile,vars){
+ 			var alias,level,names;
+			if(name.charAt(0)==='$'){
+				vars[name]=ldata+'';
+			}else{
+				level=collect.level(ldata,vars);
+				if(level.alias){
+	 				alias=level.alias;
+	 				delete level['alias'];
+	 			}
+	 			names=name.split(',');
+	 			for(var i=0;i<names.length;i++){
+	 				var selector=pile.join('')+names[i];				rules[selector]=_dom.rule(selector,level);
+	 				if(alias&&i===0){rules[alias]=rules[selector];}
+	 				collect.childs(ldata,pile.concat([names[i]]),vars);
+	 			}
+			}
+		};
+ 		collect.level=function(ldata,vars){
+ 			var obj={},tmp;
  			for(var prop in ldata){
  				if(prop.charAt(0)!=='&'){
- 					obj[prop]=ldata[prop];
+					tmp=ldata[prop]+'';
+					Object.keys(vars).map(function(k){
+						tmp=tmp.split(' ')
+						.map(function(d){return d.indexOf(k)>-1?vars[k]:d;})
+						.join(' ');
+					})
+ 					obj[prop]=tmp;
  				}
  			}
  			return obj;
  		};
- 		collect.childs=function(ldata,pile){
+ 		collect.childs=function(ldata,pile,vars){
  			var obj={};
  			for(var prop in ldata){
  				if(prop.charAt(0)==='&'){
- 					collect(ldata[prop],prop.substr(1),pile);
+ 					collect(ldata[prop],prop.substr(1),pile,Object.assign({},vars));
  				}
  			}
  		};
-
  		for(var name in data){
- 			collect(data[name],name,[]);
+ 			collect(data[name],name,[],rootVars);
  		}
  		return rules;
  	};
+
+	// -- css classes
+
+	_dom.classNames = function (element) {
+		if(element instanceof HTMLElement){
+			if(element.className&&element.className.length){
+				return element.className.split(/[ \t]+/i);
+			}
+			return [];
+		}else{
+			console.error('----------_dom.classNames Error');
+			console.log('element=',element);
+			throw('\n_dom.classNames Error:\nelement is not an HTMLElement.');
+		}
+	};
+	_dom.hasClass = function (element,className) {
+		try{return _dom.classNames(element).indexOf(className)>-1;
+		}catch(e){throw('\n_dom.hasClass Error from:\n'+e);}
+	};
+	_dom.addClass = function (element,className) {
+		var list;
+		try{list = _dom.classNames(element);
+		}catch(e){throw('\n_dom.addClass Error from:\n'+e);}
+		if(typeof(className)==='string'&&className.length&&list.indexOf(className)===-1){
+			list.push(className);
+			element.className=list.join(' ');
+			return true;
+		}
+	};
+	_dom.removeClass = function (element,className) {
+		var list,id;
+		try{list = _dom.classNames(element);
+		}catch(e){throw('\n_dom.removeClass Error from:\n'+e);}
+		if((id=list.indexOf(className))>-1){
+			list.splice(id,1);
+			element.className=list.join(' ');
+			return true;
+		}
+	};
+	_dom.swapClass = function (element,classIn,classOut) {
+		_dom.removeClass(element,classOut);
+		_dom.addClass(element,classIn);
+	};
 
 	return _dom;
 })();

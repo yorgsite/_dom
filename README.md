@@ -4,15 +4,16 @@
 
 #### A light but powerful javascript library for html apps.</br>
 
-The purpose of **_dom.js** is to work on the lower level possible, with confort, to keep open the integration architecture used by the developper.<br/>
+The purpose of **_dom.js** is to work on the lower level possible, with confort, to let the developper free to use it in any web architecture.<br/>
 It is exclusively focused on html and css creation.
 
++ Ultra light : < 10k uncompiled.
 + Easy creation of [html](#tg_html) elements and [css](#tg_css) rules.
 + Use sass like syntax to optimise your css [rules](#_dom.rules).
-+ Interacts exclusively with native browser methods.<br/>
-No time comsuming proxies.<br/>
-No code compilation.<br/>
-No intrusive attributes (except for templates, see [_dom.model](#_dom.model)).
++ Interacts exclusively with native browser methods.
+	+ No time comsuming proxies.
+	+ No code compilation.
+	+ No intrusive attributes (except when using templates, see [_dom.model](#_dom.model)).
 + Full html [templating](#tg_temlating).<br/>
 Low template architecture constraints.
 
@@ -133,7 +134,7 @@ Should contain at least one "-" to avoid conflict with natives HTMLElements.
 + `function` **constructor** : Must return an HTMLElement.<br/>
 Receive the arguments of _dom but the dont have to respect the nomenclature excepted 'tagName'.<br/>
 NB:constructor is scoped to its interface.
-+ `object|function` **cssRules** [optional] : is or returns an object describing rules like _dom.rules,
++ `object|function` **cssRules** [optional] : is or returns an object describing rules like [_dom.rules](#_dom.rules),
 but the created collection will be insancied only once and shared among interfaces.<br/>
 Adds the 'rules' property to the interface.
 <br/>
@@ -187,19 +188,34 @@ _dom.model('table-line',function(tagName,wlist,childlist){
 
 #### <a name="tg_instanciate"></a> Instanciates and interact with model interface
 
+The **__dom** attribute is added to the element to permit access to the component instance.
+
 <u>Exemple :</u>
 
 Instanciates and interact with model interface :
 
 ```javascript
 var tl=_dom('table-line',['1','*'],['000',_dom('div',{},['abc'])]);
-
+// append element.
 document.body.appendChild(tl);
+
 setTimeout(function(){
+	// calls component 'push' method.
 	tl.__dom.push('def');
 },2000);
 
 ```
+The **__dom** attribute is configurable and removable
+
+<u>Exemple :</u>
+
+```javascript
+var tl=_dom('table-line',['1','*'],['000',_dom('div',{},['abc'])]);
+var controller=tl.__dom;
+delete tl['__dom'];
+```
+
+
 
 <br/>
 <hr/>

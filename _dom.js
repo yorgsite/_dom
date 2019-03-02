@@ -19,10 +19,6 @@ var _dom=(function(){
 	};
 	_Model.prototype.build=function(args){
 		var inst=this.instance(args);
-		// keeps reference to inherited instance
-		if(inst.dom[_modelref]){
-			inst._super=inst.dom[_modelref];
-		}
 		// keeps reference to constructor scope
 		Object.defineProperty(inst.dom,_modelref,{get:function(){return inst;},configurable:true});
 		return inst.dom;
@@ -33,14 +29,6 @@ var _dom=(function(){
 
 	_Model.Instance=function(model,args){
 		var dom=model.constructor.apply(this,args);
-		if(!(dom in this)){
-			Object.defineProperty(this,'dom',{get:function(){return dom;}});
-		}
-		Object.defineProperty(this,'tagName',{get:function(){return model.tagName;}});
-		if(model.cssRules){
-			var rules=model.getRules();
-			Object.defineProperty(this,'rules',{get:function(){return rules;}});
-		}
 		if(!(dom instanceof HTMLElement)){
 			console.error('-----------------------');
 			console.log('tagName=',model.tagName);
@@ -49,6 +37,18 @@ var _dom=(function(){
 			throw('\n_dom.model Error:\nconstructor must return an HTMLElement.');
 		}
 
+		// keeps reference to inherited instance
+		if(dom[_modelref]){
+			this._super=dom[_modelref];
+		}
+		Object.defineProperty(this,'tagName',{get:function(){return model.tagName;}});
+		if(!('dom' in this)){
+			Object.defineProperty(this,'dom',{get:function(){return dom;}});
+		}
+		if(model.cssRules){
+			var rules=model.getRules();
+			Object.defineProperty(this,'rules',{get:function(){return rules;}});
+		}
 	};
 
 	// ------------- PUBLIC ---------------

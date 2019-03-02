@@ -1,4 +1,6 @@
 .gitignore 
 gitUpdate.js
 gitUpdate.bat
+compile.js
+compile.bat
 styl.js

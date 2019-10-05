@@ -61,7 +61,7 @@ var _dom=(function(){
 	 * @param {string} [nameSpace] element namesapace if any.
 	 * @returns {HTMLElement}
 	 */
-	_dom=function(tagName,datas,childs,nameSpace){
+	var _dom=function(tagName,datas,childs,nameSpace){
 		var args=arguments;
 		if(tagName in _models){
 			return _models[tagName].build(args);

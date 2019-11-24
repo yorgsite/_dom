@@ -12,7 +12,7 @@
 + Interacts exclusively with native browser methods.
 	+ No time comsuming proxies.
 	+ No code compilation.
-	+ No intrusive attributes (except when using templates, see [_dom.model](#_dom.model)).
+	+ No intrusive attributes (Attribute **_dom** added for controller when using templates, see [_dom.model](#_dom.model)).
 + Full html [templating](#tg_temlating).<br/>
 Low template architecture constraints.
 
@@ -49,7 +49,7 @@ The purposes of **_dom.js** are:
 + `object` **datas** [optional] : element attributes.
 + `Array` **childs** [optional] : element childs. can contain strings an html elements.
 + `string` **nameSpace** [optional] : element namesapace if any.
-**returns** `HTMLElement`
++ **returns** `HTMLElement`
 
 <br/>
 
@@ -77,7 +77,7 @@ document.body.appendChild(div);
 `_dom.rule(selector, datas)`
 + `string` **selector** : the new rule rule query selector.
 + `object` **datas** [optional] : style datas if any.
-**returns** `CSSStyleRule`
++ **returns** `CSSStyleRule`
 
 <br/>
 
@@ -99,7 +99,7 @@ setTimeout(function(){
 
 `_dom.rules(datas)`
 + *object* `datas` : sass like structured object.
-**returns** collection of `CSSStyleRule` by selector and aliases.
++ **returns** collection of `CSSStyleRule` by selector and aliases.
 
 <br/>
 

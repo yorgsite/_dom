@@ -12,14 +12,16 @@
 + Interacts exclusively with native browser methods.
 	+ No time comsuming proxies.
 	+ No code compilation.
-	+ No intrusive attributes (Attribute **_dom** added for controller when using templates, see [_dom.model](#_dom.model)).
-+ Full html [templating](#tg_temlating).<br/>
-Low template architecture constraints.
+	+ No intrusive attributes in base elements.
++ Full html [templating](#tg_temlating).
+	+ Low template architecture constraints.
+	+ Low dom intrusion (Attribute **_dom** added for controller when using templates, see [_dom.model](#_dom.model)).
 
 
 The purposes of **_dom.js** are:
-+ Staying simple.
-+ Working on the lower level possible.
++ Create easely dynamic apps.
++ Stay simple.
++ Work on the lower level possible.
 + Being integrable with any kind of web architecture.
 
 <hr/>

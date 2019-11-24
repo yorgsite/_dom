@@ -19,7 +19,7 @@
 
 
 The purposes of **_dom.js** are:
-+ Create easely dynamic apps.
++ Create easily dynamic apps.
 + Stay simple.
 + Work on the lower level possible.
 + Being integrable with any kind of web architecture.

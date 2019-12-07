@@ -43,6 +43,9 @@ The purposes of **_dom.js** are:
 
 <hr/>
 
+
+<hr/>
+
 #### <a name="_dom"></a> Instanciate html elements or structure
 
 

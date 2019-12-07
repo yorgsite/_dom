@@ -1,0 +1,31 @@
+{
+  "name": "domjs",
+  "version": "1.0.0",
+  "description": "A light but powerful javascript library for html apps.",
+  "main": "_dom.node.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yorgsite/_dom.git"
+  },
+  "keywords": [
+    "web",
+    "html",
+    "dom",
+    "app",
+    "webapp",
+    "applications",
+    "css",
+    "scss",
+    "templates",
+    "components"
+  ],
+  "author": "Yorg",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yorgsite/_dom/issues"
+  },
+  "homepage": "https://github.com/yorgsite/_dom#readme"
+}

@@ -1,4 +1,6 @@
 
+// ----------- file : _dom.js -----------
+
 var _dom=(function(){
 
 	// ------------- PRIVATE ---------------
@@ -269,3 +271,6 @@ var _dom=(function(){
 
 	return _dom;
 })();
+
+
+module.exports=_dom;

@@ -26,6 +26,22 @@ The purposes of **_dom.js** are:
 
 <hr/>
 
+## <a name="tg_nodejs"></a> Use with nodejs
+
+ Install :
+
+ ```
+ npm install node_dom --save-dev
+ ```
+
+Import :
+
+```javascript
+const _dom=require('node_dom');
+```
+
+<hr/>
+
 ## <a name="tg_menu"></a> Menu
 
 + [Html](#tg_html)
@@ -40,9 +56,6 @@ The purposes of **_dom.js** are:
 <hr/>
 
 ## <a name="tg_html"></a> html
-
-<hr/>
-
 
 <hr/>
 

@@ -31,13 +31,13 @@ The purposes of **_dom.js** are:
  Install :
 
  ```
- npm install node-_dom --save-dev
+ npm install node-js-_dom --save-dev
  ```
 
 Import :
 
 ```javascript
-const _dom=require('node-_dom');
+const _dom=require('node-js-_dom');
 ```
 
 <hr/>

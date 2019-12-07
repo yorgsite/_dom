@@ -1,5 +1,5 @@
 {
-  "name": "node-_dom",
+  "name": "node-js-_dom",
   "version": "1.0.0",
   "description": "A light but powerful javascript library for html apps.",
   "main": "_dom.node.js",

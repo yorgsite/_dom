@@ -3,6 +3,7 @@
 
 var _dom=(function(){
 
+	if(_dom in window)return window._dom;
 	// ------------- PRIVATE ---------------
 	// custom elements handling
 	var _modelref='__dom';
@@ -72,6 +73,10 @@ var _dom=(function(){
 	        var node = typeof(nameSpace)==="string"?
 	            document.createElementNS(nameSpace,tagName):
 	            document.createElement(tagName);
+			if(!childs && (datas instanceof Array)){
+				childs=datas;
+				datas={};
+			}
 	        var dataAssign=function(tgt,src,dataname){
 	            if(typeof(tgt)==="undefined")throw("property '"+dataname+"' doesn't exist.");
 				for(var i in src){

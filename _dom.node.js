@@ -3,7 +3,7 @@
 
 var _dom=(function(){
 
-	if(_dom in window)return window._dom;
+	if(window._dom)return window._dom;// keep old models when global _dom found
 	// ------------- PRIVATE ---------------
 	// custom elements handling
 	var _modelref='__dom';

@@ -52,6 +52,7 @@ const _dom=require('dom-for-node');
 + [Templating](#tg_temlating)
 	+ [_dom.model](#_dom.model)
 	+ [Instanciates and interact with model](#tg_instanciate)
+	+ [Model editor](#tg_model_editor)
 + [Exemples](#tg_exemples)
 <hr/>
 

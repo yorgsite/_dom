@@ -78,7 +78,7 @@ document.body.appendChild(inpt);
 
 var div=_dom('div',{style:{border:'solid 1px #0f0'}},[
 	'aaa',
-	_dom('u',{},[bbb]}),
+	_dom('u',['bbb']}),
 	'ccc'
 ]);
 document.body.appendChild(div);
@@ -198,7 +198,7 @@ _dom.model('table-line',function(tagName,wlist,childlist){
 			width='*';
 		}
 		if(!(content instanceof HTMLElement)){
-			content=document.createTextNode(content);
+			content=document.createTextNode(content+'');
 		}
 		var nutd=_dom('td',{width:width},[content]);
 		dom_tr.appendChild(nutd);
@@ -242,6 +242,12 @@ delete tl['__dom'];
 ```
 
 
+
+<br/>
+<hr/>
+#### <a name="tg_model_editor"></a> Model editor.
+
+To create easyly the backbone of your component, you can use the [model editor](https://github.com/yorgsite/_dom/exemple).
 
 <br/>
 <hr/>

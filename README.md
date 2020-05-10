@@ -245,9 +245,10 @@ delete tl['__dom'];
 
 <br/>
 <hr/>
+
 #### <a name="tg_model_editor"></a> Model editor.
 
-To create easyly the backbone of your component, you can use the [model editor](https://github.com/yorgsite/_dom/exemple).
+To create easyly the backbone of your component, you can use the [model editor](https://github.com/yorgsite/_dom/editor).
 
 <br/>
 <hr/>

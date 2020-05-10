@@ -5,4 +5,4 @@
 
 Create the code backbone of your new component fast and easy.
 
-This is a web app, open the **index.html** file in your browser.
+This is a web app, just open the **index.html** file in your browser.

@@ -67,38 +67,38 @@ var _dom=(function(){
 		if(tagName in _models){
 			return _models[tagName].build(args);
 		}
-	    try{
-	        var node = typeof(nameSpace)==="string"?
-	            document.createElementNS(nameSpace,tagName):
-	            document.createElement(tagName);
+		try{
+			var node = typeof(nameSpace)==="string"?
+				document.createElementNS(nameSpace,tagName):
+				document.createElement(tagName);
 			if(!childs && (datas instanceof Array)){
 				childs=datas;
 				datas={};
 			}
-	        var dataAssign=function(tgt,src,dataname){
-	            if(typeof(tgt)==="undefined")throw("property '"+dataname+"' doesn't exist.");
+			var dataAssign=function(tgt,src,dataname){
+				if(typeof(tgt)==="undefined")throw("property '"+dataname+"' doesn't exist.");
 				for(var i in src){
 					if(typeof(src[i])==="object")
 					dataAssign(tgt[i],src[i],dataname+"."+i)
 					else tgt[i] = src[i];
-	            }
-	         };
-	        dataAssign(node,datas,(""+tagName).toUpperCase());
-	        if(childs && typeof(childs.length)==='number'){
-	            for(var i=0;i<childs.length;i++){
-	                if(typeof(childs[i])==="string")node.appendChild(document.createTextNode(childs[i]));
-	                else try{node.appendChild(childs[i]);}catch(e){
+				}
+			 };
+			dataAssign(node,datas,(""+tagName).toUpperCase());
+			if(childs && typeof(childs.length)==='number'){
+				for(var i=0;i<childs.length;i++){
+					if(typeof(childs[i])==="string")node.appendChild(document.createTextNode(childs[i]));
+					else try{node.appendChild(childs[i]);}catch(e){
 						console.error('-----------------------');
 						console.log('childs['+i+']=',childs[i]);
 						console.log('error=',e);
 						throw("parameter childs["+i+"] must be string or dom element.");}
-	            }
-	        }
+				}
+			}
 	   }catch(err){
 		   console.error('----------_dom Error');
 		   console.log('arguments=',args);
 		   console.log('error=',err);
-	       throw("_dom Error:\n"+err+"");
+		   throw("_dom Error:\n"+err+"");
 	   }
 	   return node;
 	};

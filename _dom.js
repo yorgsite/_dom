@@ -196,9 +196,15 @@ var _dom=(function(){
 	 			names=name.split(',');
 	 			for(var i=0;i<names.length;i++){
 	 				var selector=pile.join('')+names[i];
-					rules[selector]=_dom.rule(selector,level);
-	 				if(alias&&i===0){rules[alias]=rules[selector];}
-	 				collect.childs(ldata,pile.concat([names[i]]),vars);
+					try{
+						rules[selector]=_dom.rule(selector,level);
+					}catch(e){
+						console.warn('_dom.rules Error:\nInsertion of rule "'+selector+'" failed!');
+					}
+					if(rules[selector]){
+						if(alias&&i===0){rules[alias]=rules[selector];}
+		 				collect.childs(ldata,pile.concat([names[i]]),vars);
+					}
 	 			}
 			}
 		};

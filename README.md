@@ -166,8 +166,6 @@ but the created collection will be insancied only once and shared among interfac
 Adds the 'rules' property to the interface.
 <br/>
 
-NB : You can use the [model creator](https://github.com/yorgsite/_dom-model-creator) to generate model code.
-
 <u>Exemple :</u>
 
 
@@ -211,6 +209,8 @@ _dom.model('table-line',function(tagName,wlist,childlist){
 });
 
 ```
+
+NB : You can use the [model creator](https://github.com/yorgsite/_dom-model-creator) to generate model code.
 
 <br/>
 <hr/>

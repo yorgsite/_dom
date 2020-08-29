@@ -130,6 +130,14 @@ var _dom=(function(){
 		_models[tagName]=new _Model(tagName,constructor,cssRules);
 	};
 	/**
+	Checks if a model have been declared.
+	* @param {string} tagName : the name of the model
+	* @return {boolean} true if tagName exists.
+	*/
+	_dom.has=function(tagName){
+		return tagName in _models;
+	};
+	/**
 	 * Instanciates a declared model;
 	 * Useful if you dont want of the '__dom' property in your html element.
 	 * If not, you should instead use _dom and refer to the result '__dom' attribute.

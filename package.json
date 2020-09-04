@@ -1,6 +1,6 @@
 {
   "name": "dom-for-node",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "A light but powerful javascript library for html apps.",
   "main": "_dom.node.js",
   "scripts": {

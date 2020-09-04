@@ -6,7 +6,7 @@
 
 **_dom.js** is exclusively focused on html and css creation.
 
-+ Ultra light : < 10k uncompiled, < 5k compiled.
++ Ultra light : < 10k uncompiled, ~ 6k compiled.
 + Easy creation of [html](#tg_html) elements and [css](#tg_css) rules.
 + Use sass like syntax to optimise your css [rules](#_dom.rules).
 + Interacts exclusively with native browser methods.
@@ -16,34 +16,21 @@
 + Full html [templating](#tg_temlating).
 	+ Low template architecture constraints.
 	+ Low dom intrusion (Attribute **_dom** added for controller when using templates, see [_dom.model](#_dom.model)).
+	+ Handles [shadow dom](#).
 
 
 The purposes of **_dom.js** are:
 + Create easily dynamic apps.
-+ Stay simple.
++ Stay simple and minimal.
 + Work on the lower level possible.
 + Being integrable with any kind of web architecture.
 
 <hr/>
 
-## <a name="tg_nodejs"></a> Use with nodejs
-
- Install :
-
- ```
- npm install dom-for-node --save-dev
- ```
-
-Import :
-
-```javascript
-const _dom=require('dom-for-node');
-```
-
-<hr/>
-
 ## <a name="tg_menu"></a> Menu
 
++ [Use in web page](#tg_webjs)
++ [Use with nodejs](#tg_nodejs)
 + [Html](#tg_html)
 	+ [_dom](#_dom)
 + [Css](#tg_css)
@@ -52,8 +39,34 @@ const _dom=require('dom-for-node');
 + [Templating](#tg_temlating)
 	+ [_dom.model](#_dom.model)
 	+ [Instanciates and interact with model](#tg_instanciate)
-	+ [Model editor](#tg_model_editor)
+	+ [Shadow dom](#tg_shadow_dom) / [_dom.modelShadow](#tg__dom.modelShadow)
+	+ [Model creator](#tg_model_creator)
 + [Exemples](#tg_exemples)
+
+<hr/>
+
+## <a name="tg_webjs"></a> Use in web page
+```
+<script src="./path/to/_dom.js"></script>
+```
+
+
+
+## <a name="tg_nodejs"></a> Use with nodejs
+For web translators like **webpack**.
+
+ Install :
+
+ ```
+ npm install dom-for-node
+ ```
+
+Import :
+
+```javascript
+const _dom=require('dom-for-node');
+```
+
 <hr/>
 
 ## <a name="tg_html"></a> html
@@ -66,7 +79,7 @@ const _dom=require('dom-for-node');
 `_dom(tagName,datas,childs,nameSpace)`
 + `string` **tagName** : element tagname
 + `object` **datas** [optional] : element attributes.
-+ `Array` **childs** [optional] : element childs. can contain strings an html elements.
++ `Array` **childs** [optional] : element childs. can contain strings and html elements.
 + `string` **nameSpace** [optional] : element namesapace if any.
 + **returns** `HTMLElement`
 
@@ -118,7 +131,7 @@ setTimeout(function(){
 
 `_dom.rules(datas)`
 + *object* `datas` : sass like structured object.
-+ **returns** collection of `CSSStyleRule` by selector and aliases.
++ **returns** collection of `CSSStyleRule` by selector and **alias**.
 
 <br/>
 
@@ -155,16 +168,18 @@ setTimeout(function(){
 
 #### <a name="_dom.model"></a> Add custom structures to *_dom*
 
-`_dom.model(tagName,constructor,cssRules)`
+`_dom.model(tagName,constructor,cssRules,shadowed)`
 + `string` **tagName** : the custom element name.
-Should contain at least one "-" to avoid conflict with natives HTMLElements.
+Must contain at least one "-" to avoid conflict with natives HTMLElements.
 + `function` **constructor** : Must return an HTMLElement.<br/>
-Receive the arguments of _dom but the dont have to respect the nomenclature excepted 'tagName'.<br/>
-NB:constructor is scoped to its interface.
+Receive the **arguments** from [_dom](#) but the dont have to respect the classical nomenclature excepted **tagName** (the first).<br/>
+<u>/!\\</u> **constructor** Must be a function and <u>NOT a lambda expression</u> because it is scoped to its interface.
 + `object|function` **cssRules** [optional] : is or returns an object describing rules like [_dom.rules](#_dom.rules),
 but the created collection will be insancied only once and shared among interfaces.<br/>
-Adds the 'rules' property to the interface.
-<br/>
++ `boolean` **shadowed** [optional] : if true, your model uses [shadow dom](#tg_shadow_dom).<br/>
+
+
+NB : You can use the [Model creator](#tg_model_creator) to help generate model code.
 
 <u>Exemple :</u>
 
@@ -210,8 +225,6 @@ _dom.model('table-line',function(tagName,wlist,childlist){
 
 ```
 
-NB : You can use the [model creator](https://github.com/yorgsite/_dom-model-creator) to generate model code.
-
 <br/>
 <hr/>
 
@@ -220,8 +233,6 @@ NB : You can use the [model creator](https://github.com/yorgsite/_dom-model-crea
 The **__dom** attribute is added to the element to permit access to the component instance.
 
 <u>Exemple :</u>
-
-Instanciates and interact with model interface :
 
 ```javascript
 var tl=_dom('table-line',['1','*'],['000',_dom('div',{},['abc'])]);
@@ -234,7 +245,7 @@ setTimeout(function(){
 },2000);
 
 ```
-The **__dom** attribute is configurable and removable
+The **__dom** attribute is configurable. You can hide the controller by removing the instance reference.
 
 <u>Exemple :</u>
 
@@ -249,9 +260,41 @@ delete tl['__dom'];
 <br/>
 <hr/>
 
-#### <a name="tg_model_editor"></a> Model editor.
+#### <a name="tg_shadow_dom"></a> Shadow dom.
 
-To create fast and easy the backbone of your component, you can use the [model editor](https://github.com/yorgsite/_dom/tree/master/editor).
+Though **_dom** is more designed for javascript, by using **shadow dom** with your [models](#_dom.model), you make them instanciables via Html. <br/>[About shadow dom](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_shadow_DOM).
+
+
+There are two ways to implement **shadow dom** with **_dom** models :
++ **On declaration** :<br/>Set the [_dom.model](#tg__dom.model)  **shadowed** argument to **true** when you declare your model.
++ **When the model exists** but he may not implement **shadow dom** :<br/> call [_dom.modelShadow](#tg__dom.modelShadow).
+
+
+<a name="tg__dom.modelShadow"></a>`_dom.modelShadow(tagName)`
++ `string` **tagName** : the [model](#_dom.model) name.
+
+
+
+<u>Exemple :</u>
++ in js
+
+```javascript
+_dom.modelShadow('table-line');
+```
++ in html
+
+```html
+<table-line wlist='["1","*"]' childlist='["abc"]'></table-line>
+```
+
+
+
+<br/>
+<hr/>
+
+#### <a name="tg_model_creator"></a> Model creator.
+
+To create fast and easy the backbone of your component, you can use the [model creator](https://github.com/yorgsite/_dom-model-creator).
 
 <br/>
 <hr/>

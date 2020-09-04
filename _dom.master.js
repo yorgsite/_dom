@@ -1,5 +1,9 @@
+
 var _dom=(function(){
-	if(window._dom)return window._dom;
+
+	if(window._dom)return window._dom;// keep old models when global _dom found
+	// ------------- PRIVATE ---------------
+	// custom elements handling
 	var _modelref='__dom';
 	var _models={};
 	var _Model=function(tagName,constructor,cssRules){
@@ -16,12 +20,14 @@ var _dom=(function(){
 	};
 	_Model.prototype.build=function(args){
 		var inst=this.instance(args);
+		// keeps reference to constructor scope
 		Object.defineProperty(inst.dom,_modelref,{get:function(){return inst;},configurable:true});
 		return inst.dom;
 	};
 	_Model.prototype.instance=function(args){
 		return new _Model.Instance(this,args);
 	};
+
 	_Model.Instance=function(model,args){
 		var dom=model.constructor.apply(this,args);
 		if(!(dom instanceof HTMLElement)){
@@ -31,6 +37,8 @@ var _dom=(function(){
 			console.log('this.dom=',dom);
 			throw('\n_dom.model Error:\nconstructor must return an HTMLElement.');
 		}
+
+		// keeps reference to inherited instance
 		if(dom[_modelref]){
 			this._super=dom[_modelref];
 		}
@@ -43,6 +51,17 @@ var _dom=(function(){
 			Object.defineProperty(this,'rules',{get:function(){return rules;}});
 		}
 	};
+
+	// ------------- PUBLIC ---------------
+
+	/**
+	 * creates an HTMLElement
+	 * @parameter {string} tagName the element tagname
+	 * @parameter {object} [datas] element attributes.
+	 * @parameter {Array} [childs] element childs. can contain strings an html elements.
+	 * @parameter {string} [nameSpace] element namesapace if any.
+	 * @returns {HTMLElement}
+	 */
 	var _dom=function(tagName,datas,childs,nameSpace){
 		var args=arguments;
 		if(tagName in _models){
@@ -83,7 +102,20 @@ var _dom=(function(){
 	   }
 	   return node;
 	};
+	/**
+	* add a custom element to _dom.
+	* NB: the '__dom' property will be added to the element, pointing to it's interface (model instance).
+	* interface['dom'] : dom element;
+	* interface[tagName] : element tagName;
+	* @parameter {string} tagName the custom element name. Should contain at least one "-" to avoid conflict with natives HTMLElements.
+	* @parameter {function} constructor receive the arguments of _dom but the dont have to respect the nomenclature excepted 'tagName'. Must return an HTMLElement.NB:constructor Must be a function and NOT a lambda expression because it is scoped to its interface.
+	* @parameter {object|function} [cssRules] is or returns an object describing rules like _dom.rules,
+	but the created collection will be insancied only once and shared among interfaces.
+	Adds the 'rules' property to the interface.
+	* @parameter {boolean} [shadowed] If true, your model is instanciable via html. See _dom.modelShadow.
+	*/
 	_dom.model=function(tagName,constructor,cssRules,shadowed){
+		// console.log('add model',arguments);
 		if(tagName.indexOf('-')===-1){
 			console.warn('_dom.model suspect tagName "'+tagName+'" should contain at least one "-" to avoid conflict with natives HTMLElements.');
 		}
@@ -99,9 +131,22 @@ var _dom=(function(){
 		_models[tagName]=new _Model(tagName,constructor,cssRules);
 		if(shadowed)_dom.modelShadow(tagName);
 	};
+	/**
+	Checks if a model have been declared.
+	* @parameter {string} tagName : the name of the model
+	* @return {boolean} true if tagName exists.
+	*/
 	_dom.has=function(tagName){
 		return tagName in _models;
 	};
+	/**
+	 * Instanciates a declared model;
+	 * Useful if you dont want of the '__dom' property in your html element.
+	 * If not, you should instead use _dom and refer to the result '__dom' attribute.
+	 * @parameter {string} tagName
+	 * @parameter {...} ___ whatever arguments the model constructor uses
+	 * @returns {ModelInstance} an object with the 'dom' property as the root HTMLElement.
+	 */
 	_dom.instance=function(tagName,whatever__){
 		if(!(tagName in _models)){
 			console.error('----------_dom.instance Error');
@@ -110,6 +155,15 @@ var _dom=(function(){
 		}
 		return _models[tagName].instance(arguments);
 	};
+
+	// -------------- css -----------
+
+	/**
+	 * create a new js cssRule object;
+	 * @parameter {string} selector the new rule css query.
+	 * @parameter {object} [datas] style datas.
+	 * @returns {CSSStyleRule}
+	 */
 	_dom.rule = function (selector, datas) {
 		if(typeof(selector)!=='string'||!selector.length){
 			console.error('----------_dom.rule Error');
@@ -131,6 +185,12 @@ var _dom=(function(){
 		}
 		return rule;
 	};
+
+	/**
+	 * create a colection of cssRule objects;
+	 * @parameter {object} datas sass like structured object
+	 * @returns {collection<CSSStyleRule>}
+	 */
 	 _dom.rules	= function(data){
  		var rules={},rootVars={};
  		var collect=function(ldata,name,pile,vars){
@@ -184,6 +244,9 @@ var _dom=(function(){
  		}
  		return rules;
  	};
+
+	// -- css classes
+
 	_dom.classNames = function (element) {
 		if(element instanceof HTMLElement){
 			if(element.className&&element.className.length){
@@ -224,6 +287,9 @@ var _dom=(function(){
 		_dom.removeClass(element,classOut);
 		_dom.addClass(element,classIn);
 	};
+
+	//	---- shadow dom
+
 	let shadowConstructor=function(scope,tagName,args){
 		let shadow = scope.attachShadow({mode: 'open'});
 		let und,wrapper;
@@ -236,23 +302,35 @@ var _dom=(function(){
 			}
 			return attr;
 		});
+
 		args=[tagName]
 		.concat(values);
 		console.log('args');
 		wrapper=_dom.apply(null,args);
 		shadow.appendChild(wrapper);
+
 		let rhtml=[],rules=wrapper.__dom.rules;
 		for(let r in rules)rhtml.push(rules[r].cssText);
 		shadow.appendChild(_dom('style',{type:'text/css',textContent:rhtml.join('\n')}));
 	};
+
+	/**
+	check if a model has allready been shadowed.
+	* @parameter {string} tagName the model name.
+	*/
 	_dom.modelShadowed = function (tagName) {
 		return !!_models[tagName].shadow;
 	};
+	/**
+	renders your model intanciable via html by using dom shadow
+	* @parameter {string} tagName the model name.
+	*/
 	_dom.modelShadow = function (tagName) {
 		if(_models[tagName]){
 			if(_dom.modelShadowed(tagName))return;
 			let name=tagName.split('-').map(v=>v.charAt(0).toUpperCase()+v.substr(1)).join('');
 			let args=(_models[tagName].constructor+'').split(')',2)[0].split('(')[1].split(',');
+			// args=[tagName].concat(args.slice(1));
 			class _class_ extends HTMLElement {
 				constructor() {
 					super();
@@ -271,5 +349,6 @@ var _dom=(function(){
 			].join('\n'))
 		}
 	};
+
 	return _dom;
 })();

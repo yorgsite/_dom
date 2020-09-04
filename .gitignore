@@ -1,6 +1,11 @@
-.gitignore 
+node_modules
+doc
+.gitignore
+package-lock.json
 gitUpdate.js
 gitUpdate.bat
-compile.js
+toolz.js
 compile.bat
+jsdoc.conf.js
+jsdoc.bat
 styl.js

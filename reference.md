@@ -1,5 +1,5 @@
 
-### **_dom.js** library reference.
+## **_dom.js** library reference.
 
 This documentation have been generated from the [code source](_dom.master.js) jsdoc.
 

@@ -1,7 +1,7 @@
 
 ### **_dom.js** library reference.
 
-This documentation have been generated from the [code source](https://github.com/yorgsite/_dom/blob/master/_dom.master.js) jsdoc.
+This documentation have been generated from the [code source](_dom.master.js) jsdoc.
 
 
 ### <a name='main_menu'></a> Menu
@@ -28,6 +28,8 @@ This documentation have been generated from the [code source](https://github.com
 + `string` **nameSpace** [optional] : element namesapace if any.
 + `HTMLElement` : 
 
+[▲ Menu](#main_menu)
+
 <hr/>
 
 #### <a name="tgt__dom.model"></a> _dom.model
@@ -39,6 +41,8 @@ This documentation have been generated from the [code source](https://github.com
 + `object|function` **cssRules** [optional] : is or returns an object describing rules like _dom.rules,<br/>but the created collection will be insancied only once and shared among interfaces.<br/>Adds the 'rules' property to the interface.
 + `boolean` **shadowed** [optional] : If true, your model is instanciable via html. See _dom.modelShadow.
 
+[▲ Menu](#main_menu)
+
 <hr/>
 
 #### <a name="tgt__dom.has"></a> _dom.has
@@ -47,6 +51,8 @@ This documentation have been generated from the [code source](https://github.com
 `_dom.has(tagName)`
 + `string` **tagName** : : the name of the model
 + `boolean` : true if tagName exists.
+
+[▲ Menu](#main_menu)
 
 <hr/>
 
@@ -58,6 +64,8 @@ This documentation have been generated from the [code source](https://github.com
 + `...` **___** : whatever arguments the model constructor uses
 + `ModelInstance` : an object with the 'dom' property as the root HTMLElement.
 
+[▲ Menu](#main_menu)
+
 <hr/>
 
 #### <a name="tgt__dom.rule"></a> _dom.rule
@@ -68,6 +76,8 @@ This documentation have been generated from the [code source](https://github.com
 + `object` **datas** [optional] : style datas.
 + `CSSStyleRule` : 
 
+[▲ Menu](#main_menu)
+
 <hr/>
 
 #### <a name="tgt__dom.rules"></a> _dom.rules
@@ -77,6 +87,8 @@ This documentation have been generated from the [code source](https://github.com
 + `object` **datas** : sass like structured object
 + `collection<CSSStyleRule>` : 
 
+[▲ Menu](#main_menu)
+
 <hr/>
 
 #### <a name="tgt__dom.modelShadowed"></a> _dom.modelShadowed
@@ -85,6 +97,8 @@ This documentation have been generated from the [code source](https://github.com
 `_dom.modelShadowed(tagName)`
 + `string` **tagName** : the model name.
 
+[▲ Menu](#main_menu)
+
 <hr/>
 
 #### <a name="tgt__dom.modelShadow"></a> _dom.modelShadow
@@ -92,3 +106,5 @@ This documentation have been generated from the [code source](https://github.com
 
 `_dom.modelShadow(tagName)`
 + `string` **tagName** : the model name.
+
+[▲ Menu](#main_menu)

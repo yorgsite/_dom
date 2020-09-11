@@ -21,6 +21,9 @@ This documentation have been generated from the [code source](_dom.master.js) js
 #### <a name="tgt__dom"></a> _dom
 
 
+ creates an HTMLElement
+
+
 `_dom(tagName,datas,childs,nameSpace)`
 + `string` **tagName** : the element tagname
 + `object` **datas** [optional] : element attributes.
@@ -33,6 +36,9 @@ This documentation have been generated from the [code source](_dom.master.js) js
 <hr/>
 
 #### <a name="tgt__dom.model"></a> _dom.model
+
+
+ add a custom element to _dom.<br/> NB: the '__dom' property will be added to the element, pointing to it's interface (model instance).<br/> interface['dom'] : dom element;<br/> interface[tagName] : element tagName;
 
 
 `_dom.model(tagName,constructor,cssRules,shadowed)`
@@ -48,6 +54,9 @@ This documentation have been generated from the [code source](_dom.master.js) js
 #### <a name="tgt__dom.has"></a> _dom.has
 
 
+Checks if a model have been declared.
+
+
 `_dom.has(tagName)`
 + `string` **tagName** : : the name of the model
 + `boolean` : true if tagName exists.
@@ -57,6 +66,9 @@ This documentation have been generated from the [code source](_dom.master.js) js
 <hr/>
 
 #### <a name="tgt__dom.instance"></a> _dom.instance
+
+
+ Instanciates a declared model;<br/> Useful if you dont want of the '__dom' property in your html element.<br/> If not, you should instead use _dom and refer to the result '__dom' attribute.
 
 
 `_dom.instance(tagName,___)`
@@ -71,6 +83,9 @@ This documentation have been generated from the [code source](_dom.master.js) js
 #### <a name="tgt__dom.rule"></a> _dom.rule
 
 
+ create a new js cssRule object;
+
+
 `_dom.rule(selector,datas)`
 + `string` **selector** : the new rule css query.
 + `object` **datas** [optional] : style datas.
@@ -81,6 +96,9 @@ This documentation have been generated from the [code source](_dom.master.js) js
 <hr/>
 
 #### <a name="tgt__dom.rules"></a> _dom.rules
+
+
+ create a colection of cssRule objects;
 
 
 `_dom.rules(datas)`
@@ -94,6 +112,9 @@ This documentation have been generated from the [code source](_dom.master.js) js
 #### <a name="tgt__dom.modelShadowed"></a> _dom.modelShadowed
 
 
+check if a model has allready been shadowed.
+
+
 `_dom.modelShadowed(tagName)`
 + `string` **tagName** : the model name.
 
@@ -102,6 +123,9 @@ This documentation have been generated from the [code source](_dom.master.js) js
 <hr/>
 
 #### <a name="tgt__dom.modelShadow"></a> _dom.modelShadow
+
+
+renders your model intanciable via html by using dom shadow
 
 
 `_dom.modelShadow(tagName)`

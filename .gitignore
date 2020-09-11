@@ -1,5 +1,6 @@
 node_modules
 doc
+forme
 .gitignore
 package-lock.json
 gitUpdate.js

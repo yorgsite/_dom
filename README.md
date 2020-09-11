@@ -43,6 +43,7 @@ The purposes of **_dom.js** are:
 	+ [Model creator](#tg_model_creator)
 + [Exemples](#tg_exemples)
 
+You may also use the [quick reference](reference.md).
 <hr/>
 
 ## <a name="tg_webjs"></a> Use in web page

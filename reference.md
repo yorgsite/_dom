@@ -29,16 +29,16 @@ This documentation have been generated from the [code source](_dom.master.js) js
 + `object` **datas** [optional] : element attributes.
 + `Array` **childs** [optional] : element childs. can contain strings an html elements.
 + `string` **nameSpace** [optional] : element namesapace if any.
-+ `HTMLElement` : 
++ **return**<br/> `HTMLElement` : a new html element
 
-[▲ Menu](#main_menu)
+[▲](#main_menu)
 
 <hr/>
 
 #### <a name="tgt__dom.model"></a> _dom.model
 
 
- add a custom element to _dom.<br/> NB: the '__dom' property will be added to the element, pointing to it's interface (model instance).<br/> interface['dom'] : dom element;<br/> interface[tagName] : element tagName;
+ add a custom element to _dom.<br/> NB: the **__dom** property will be added to the element, pointing to it's interface (model instance).<br/> interface['dom'] : dom element;<br/> interface[tagName] : element tagName;
 
 
 `_dom.model(tagName,constructor,cssRules,shadowed)`
@@ -47,7 +47,7 @@ This documentation have been generated from the [code source](_dom.master.js) js
 + `object|function` **cssRules** [optional] : is or returns an object describing rules like _dom.rules,<br/>but the created collection will be insancied only once and shared among interfaces.<br/>Adds the 'rules' property to the interface.
 + `boolean` **shadowed** [optional] : If true, your model is instanciable via html. See _dom.modelShadow.
 
-[▲ Menu](#main_menu)
+[▲](#main_menu)
 
 <hr/>
 
@@ -59,24 +59,24 @@ Checks if a model have been declared.
 
 `_dom.has(tagName)`
 + `string` **tagName** : : the name of the model
-+ `boolean` : true if tagName exists.
++ **return**<br/> `boolean` : true if tagName exists.
 
-[▲ Menu](#main_menu)
+[▲](#main_menu)
 
 <hr/>
 
 #### <a name="tgt__dom.instance"></a> _dom.instance
 
 
- Instanciates a declared model;<br/> Useful if you dont want of the '__dom' property in your html element.<br/> If not, you should instead use _dom and refer to the result '__dom' attribute.
+ Instanciates a declared model;<br/> Useful if you dont want of the **__dom** property in your html element.<br/> If not, you should instead use _dom and refer to the result **__dom** attribute.
 
 
 `_dom.instance(tagName,___)`
-+ `string` **tagName** : 
++ `string` **tagName**
 + `...` **___** : whatever arguments the model constructor uses
-+ `ModelInstance` : an object with the 'dom' property as the root HTMLElement.
++ **return**<br/> `ModelInstance` : an object with the 'dom' property as the root HTMLElement.
 
-[▲ Menu](#main_menu)
+[▲](#main_menu)
 
 <hr/>
 
@@ -89,9 +89,9 @@ Checks if a model have been declared.
 `_dom.rule(selector,datas)`
 + `string` **selector** : the new rule css query.
 + `object` **datas** [optional] : style datas.
-+ `CSSStyleRule` : 
++ **return**<br/> `CSSStyleRule`
 
-[▲ Menu](#main_menu)
+[▲](#main_menu)
 
 <hr/>
 
@@ -103,9 +103,9 @@ Checks if a model have been declared.
 
 `_dom.rules(datas)`
 + `object` **datas** : sass like structured object
-+ `collection<CSSStyleRule>` : 
++ **return**<br/> `collection<CSSStyleRule>`
 
-[▲ Menu](#main_menu)
+[▲](#main_menu)
 
 <hr/>
 
@@ -118,7 +118,7 @@ check if a model has allready been shadowed.
 `_dom.modelShadowed(tagName)`
 + `string` **tagName** : the model name.
 
-[▲ Menu](#main_menu)
+[▲](#main_menu)
 
 <hr/>
 
@@ -131,4 +131,4 @@ renders your model intanciable via html by using dom shadow
 `_dom.modelShadow(tagName)`
 + `string` **tagName** : the model name.
 
-[▲ Menu](#main_menu)
+[▲](#main_menu)

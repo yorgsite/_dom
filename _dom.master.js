@@ -60,7 +60,7 @@ var _dom=(function(){
 	 * @parameter {object} [datas] element attributes.
 	 * @parameter {Array} [childs] element childs. can contain strings an html elements.
 	 * @parameter {string} [nameSpace] element namesapace if any.
-	 * @returns {HTMLElement}
+	 * @returns {HTMLElement} a new html element
 	 */
 	var _dom=function(tagName,datas,childs,nameSpace){
 		var args=arguments;
@@ -104,7 +104,7 @@ var _dom=(function(){
 	};
 	/**
 	* add a custom element to _dom.
-	* NB: the '__dom' property will be added to the element, pointing to it's interface (model instance).
+	* NB: the **__dom** property will be added to the element, pointing to it's interface (model instance).
 	* interface['dom'] : dom element;
 	* interface[tagName] : element tagName;
 	* @parameter {string} tagName the custom element name. Should contain at least one "-" to avoid conflict with natives HTMLElements.
@@ -141,8 +141,8 @@ var _dom=(function(){
 	};
 	/**
 	 * Instanciates a declared model;
-	 * Useful if you dont want of the '__dom' property in your html element.
-	 * If not, you should instead use _dom and refer to the result '__dom' attribute.
+	 * Useful if you dont want of the **__dom** property in your html element.
+	 * If not, you should instead use _dom and refer to the result **__dom** attribute.
 	 * @parameter {string} tagName
 	 * @parameter {...} ___ whatever arguments the model constructor uses
 	 * @returns {ModelInstance} an object with the 'dom' property as the root HTMLElement.

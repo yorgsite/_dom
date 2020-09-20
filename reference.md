@@ -12,7 +12,9 @@ This documentation have been generated from the [code source](_dom.master.js) js
 	+ [_dom.has](#tgt__dom.has)
 	+ [_dom.instance](#tgt__dom.instance)
 	+ [_dom.rule](#tgt__dom.rule)
+	+ [_dom.sheet](#tgt__dom.sheet)
 	+ [_dom.rules](#tgt__dom.rules)
+	+ [_dom.getRulesData](#tgt__dom.getRulesData)
 	+ [_dom.modelShadowed](#tgt__dom.modelShadowed)
 	+ [_dom.modelShadow](#tgt__dom.modelShadow)
 
@@ -21,7 +23,7 @@ This documentation have been generated from the [code source](_dom.master.js) js
 #### <a name="tgt__dom"></a> _dom
 
 
- creates an HTMLElement
+ Create an HTMLElement
 
 
 `_dom(tagName,datas,childs,nameSpace)`
@@ -38,7 +40,7 @@ This documentation have been generated from the [code source](_dom.master.js) js
 #### <a name="tgt__dom.model"></a> _dom.model
 
 
- add a custom element to _dom.<br/> NB: the **__dom** property will be added to the element, pointing to it's interface (model instance).<br/> interface['dom'] : dom element;<br/> interface[tagName] : element tagName;
+ Add a custom element to _dom.<br/> NB: the **__dom** property will be added to the element, pointing to it's interface (model instance).<br/> interface['dom'] : dom element;<br/> interface[tagName] : element tagName;
 
 
 `_dom.model(tagName,constructor,cssRules,shadowed)`
@@ -68,7 +70,7 @@ Checks if a model have been declared.
 #### <a name="tgt__dom.instance"></a> _dom.instance
 
 
- Instanciates a declared model;<br/> Useful if you dont want of the **__dom** property in your html element.<br/> If not, you should instead use _dom and refer to the result **__dom** attribute.
+ Instanciates a declared model.<br/> Useful if you dont want of the **__dom** property in your html element.<br/> If not, you should instead use _dom and refer to the result **__dom** attribute.
 
 
 `_dom.instance(tagName,___)`
@@ -83,7 +85,7 @@ Checks if a model have been declared.
 #### <a name="tgt__dom.rule"></a> _dom.rule
 
 
- create a new js cssRule object;
+ Create a new js cssRule object;
 
 
 `_dom.rule(selector,datas)`
@@ -95,15 +97,42 @@ Checks if a model have been declared.
 
 <hr/>
 
+#### <a name="tgt__dom.sheet"></a> _dom.sheet
+
+
+
+
+
+Property
++ ![](https://via.placeholder.com/15/660099/000000?text=+) `CSSStyleSheet` **_dom.sheet** : The last available CSSStyleSheet.
+
+[▲](#main_menu)
+
+<hr/>
+
 #### <a name="tgt__dom.rules"></a> _dom.rules
 
 
- create a colection of cssRule objects;
+ Create a collection of cssRule objects;
 
 
 `_dom.rules(datas)`
 + ![](https://via.placeholder.com/15/1589F0/000000?text=+) `object` **datas** : sass like structured object
-+ ![](https://via.placeholder.com/15/ee9900/000000?text=+) **return**<br/> `collection<CSSStyleRule>`
++ ![](https://via.placeholder.com/15/ee9900/000000?text=+) **return**<br/> `object([ruleName]:CSSStyleRule)`
+
+[▲](#main_menu)
+
+<hr/>
+
+#### <a name="tgt__dom.getRulesData"></a> _dom.getRulesData
+
+
+ Transform sass like data to css like data.
+
+
+`_dom.getRulesData(datas)`
++ ![](https://via.placeholder.com/15/1589F0/000000?text=+) `object` **datas** : sass like structured object
++ ![](https://via.placeholder.com/15/ee9900/000000?text=+) **return**<br/> `object(rules:object,alias:object)` : data with css rules and aliases.
 
 [▲](#main_menu)
 
@@ -117,6 +146,7 @@ check if a model has allready been shadowed.
 
 `_dom.modelShadowed(tagName)`
 + ![](https://via.placeholder.com/15/1589F0/000000?text=+) `string` **tagName** : the model name.
++ ![](https://via.placeholder.com/15/ee9900/000000?text=+) **return**<br/> `boolean`
 
 [▲](#main_menu)
 

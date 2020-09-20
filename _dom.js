@@ -110,18 +110,13 @@ var _dom=(function(){
 		}
 		return _models[tagName].instance(arguments);
 	};
-	_dom.rule = function (selector, datas) {
+	_dom.rule = function (selector, datas, sheet) {
 		if(typeof(selector)!=='string'||!selector.length){
 			console.error('----------_dom.rule Error');
 			console.log('selector=',selector);
 			throw('\n_dom.rule Error:\nselector is not a valid css query.');
 		}
-		if (document.styleSheets.length == 0) {
-			var selem = document.createElement('style');
-			selem.appendChild(document.createTextNode(""));
-			document.documentElement.appendChild(selem);
-		}
-		var sheet = document.styleSheets[document.styleSheets.length - 1];
+		if(!(sheet instanceof CSSStyleSheet))sheet = _dom.sheet;
 		sheet.insertRule(selector + "{\n\n}", sheet.cssRules.length);
 		var rule = sheet.cssRules[sheet.cssRules.length - 1];
 		if (datas) {
@@ -131,59 +126,54 @@ var _dom=(function(){
 		}
 		return rule;
 	};
-	 _dom.rules	= function(data){
- 		var rules={},rootVars={};
- 		var collect=function(ldata,name,pile,vars){
- 			var alias,level,names;
-			if(name.charAt(0)==='$'){
-				vars[name]=ldata+'';
-			}else{
-				level=collect.level(ldata,vars);
-				if(level.alias){
-	 				alias=level.alias;
-	 				delete level['alias'];
-	 			}
-	 			names=name.split(',');
-	 			for(var i=0;i<names.length;i++){
-	 				var selector=pile.join('')+names[i];
-					try{
-						rules[selector]=_dom.rule(selector,level);
-					}catch(e){
-						console.warn('_dom.rules Error:\nInsertion of rule "'+selector+'" failed!');
-					}
-					if(rules[selector]){
-						if(alias&&i===0){rules[alias]=rules[selector];}
-		 				collect.childs(ldata,pile.concat([names[i]]),vars);
-					}
-	 			}
+	Object.defineProperty(_dom,'sheet',{
+		get:function(){
+			if (document.styleSheets.length == 0) {
+	 			document.documentElement.appendChild(_dom('style',[""]));
+	 		}
+			return document.styleSheets[document.styleSheets.length - 1];
+		}
+	});
+	_dom.rules	= function(data,sheet){
+		let rules={},rdata=_dom.getRulesData(data);
+		if(!(sheet instanceof CSSStyleSheet))sheet = _dom.sheet;
+		for(let k in rdata.rules){
+			try{rules[k]=_dom.rule(k,rdata.rules[k],sheet);}catch(e){
+				console.warn('_dom.rules Warning:\nInsertion of rule "'+k+'" failed!\n\n'+e);
 			}
-		};
- 		collect.level=function(ldata,vars){
- 			var obj={},tmp;
- 			for(var prop in ldata){
- 				if(prop.charAt(0)!=='&'){
-					tmp=ldata[prop]+'';
-					Object.keys(vars).forEach(function(k){
-						tmp=tmp.indexOf(k)>-1?tmp.split(k).join(vars[k]):tmp;
-					})
- 					obj[prop]=tmp;
- 				}
- 			}
- 			return obj;
- 		};
- 		collect.childs=function(ldata,pile,vars){
- 			var obj={};
- 			for(var prop in ldata){
- 				if(prop.charAt(0)==='&'){
- 					collect(ldata[prop],prop.substr(1),pile,Object.assign({},vars));
- 				}
- 			}
- 		};
- 		for(var name in data){
- 			collect(data[name],name,[],rootVars);
- 		}
- 		return rules;
+			if(k in rdata.alias)rules[rdata.alias[k]]=rules[k];
+		}
+		return rules;
  	};
+	_dom.getRulesData=function(data){
+		let res={rules:{},alias:{}};
+		let collect=function(dat,vars,pile){
+			let obj={},rname;
+			if(pile.length)rname=pile.join('');
+			for(let prop in dat){
+				let c=prop.charAt(0);
+				if(c==='$'){
+					vars[prop.substr(1)]=dat[prop];
+				}else if(c==='@'){
+				}else if(!pile.length||c==='&'){
+					(pile.length?prop.substr(1):prop).split(',').forEach(name=>{
+						collect(dat[prop],Object.assign({},vars),pile.concat([name]));
+					});
+				}else if(prop==='alias'){
+					res.alias[rname]=dat[prop];
+				}else{
+					let tmp=dat[prop]+'';
+					Object.keys(vars).forEach(k=>{
+						tmp=tmp.indexOf(k)>-1?tmp.split(k).join(vars[k]):tmp;
+					});
+					obj[prop]=tmp;
+				}
+			}
+			if(rname)res.rules[rname]=obj;
+		};
+		collect(data,{},[]);
+		return res;
+	};
 	_dom.classNames = function (element) {
 		if(element instanceof HTMLElement){
 			if(element.className&&element.className.length){

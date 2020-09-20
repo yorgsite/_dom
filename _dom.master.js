@@ -55,7 +55,7 @@ var _dom=(function(){
 	// ------------- PUBLIC ---------------
 
 	/**
-	 * creates an HTMLElement
+	 * Create an HTMLElement
 	 * @parameter {string} tagName the element tagname
 	 * @parameter {object} [datas] element attributes.
 	 * @parameter {Array} [childs] element childs. can contain strings an html elements.
@@ -103,7 +103,7 @@ var _dom=(function(){
 	   return node;
 	};
 	/**
-	* add a custom element to _dom.
+	* Add a custom element to _dom.
 	* NB: the **__dom** property will be added to the element, pointing to it's interface (model instance).
 	* interface['dom'] : dom element;
 	* interface[tagName] : element tagName;
@@ -140,7 +140,7 @@ var _dom=(function(){
 		return tagName in _models;
 	};
 	/**
-	 * Instanciates a declared model;
+	 * Instanciates a declared model.
 	 * Useful if you dont want of the **__dom** property in your html element.
 	 * If not, you should instead use _dom and refer to the result **__dom** attribute.
 	 * @parameter {string} tagName
@@ -159,23 +159,18 @@ var _dom=(function(){
 	// -------------- css -----------
 
 	/**
-	 * create a new js cssRule object;
+	 * Create a new js cssRule object;
 	 * @parameter {string} selector the new rule css query.
 	 * @parameter {object} [datas] style datas.
 	 * @returns {CSSStyleRule}
 	 */
-	_dom.rule = function (selector, datas) {
+	_dom.rule = function (selector, datas, sheet) {
 		if(typeof(selector)!=='string'||!selector.length){
 			console.error('----------_dom.rule Error');
 			console.log('selector=',selector);
 			throw('\n_dom.rule Error:\nselector is not a valid css query.');
 		}
-		if (document.styleSheets.length == 0) {
-			var selem = document.createElement('style');
-			selem.appendChild(document.createTextNode(""));
-			document.documentElement.appendChild(selem);
-		}
-		var sheet = document.styleSheets[document.styleSheets.length - 1];
+		if(!(sheet instanceof CSSStyleSheet))sheet = _dom.sheet;
 		sheet.insertRule(selector + "{\n\n}", sheet.cssRules.length);
 		var rule = sheet.cssRules[sheet.cssRules.length - 1];
 		if (datas) {
@@ -185,65 +180,70 @@ var _dom=(function(){
 		}
 		return rule;
 	};
+	/**
+	*
+	* @property {CSSStyleSheet} _dom.sheet The last available CSSStyleSheet.
+	*/
+	Object.defineProperty(_dom,'sheet',{
+		get:function(){
+			if (document.styleSheets.length == 0) {
+	 			document.documentElement.appendChild(_dom('style',[""]));
+	 		}
+			return document.styleSheets[document.styleSheets.length - 1];
+		}
+	});
 
 	/**
-	 * create a colection of cssRule objects;
+	 * Create a collection of cssRule objects;
 	 * @parameter {object} datas sass like structured object
-	 * @returns {collection<CSSStyleRule>}
+	 * @returns {object([ruleName]:CSSStyleRule)}
 	 */
-	 _dom.rules	= function(data){
- 		var rules={},rootVars={};
- 		var collect=function(ldata,name,pile,vars){
- 			var alias,level,names;
-			if(name.charAt(0)==='$'){
-				vars[name]=ldata+'';
-			}else{
-				level=collect.level(ldata,vars);
-				if(level.alias){
-	 				alias=level.alias;
-	 				delete level['alias'];
-	 			}
-	 			names=name.split(',');
-	 			for(var i=0;i<names.length;i++){
-	 				var selector=pile.join('')+names[i];
-					try{
-						rules[selector]=_dom.rule(selector,level);
-					}catch(e){
-						console.warn('_dom.rules Error:\nInsertion of rule "'+selector+'" failed!');
-					}
-					if(rules[selector]){
-						if(alias&&i===0){rules[alias]=rules[selector];}
-		 				collect.childs(ldata,pile.concat([names[i]]),vars);
-					}
-	 			}
+	_dom.rules	= function(data,sheet){
+		let rules={},rdata=_dom.getRulesData(data);
+		if(!(sheet instanceof CSSStyleSheet))sheet = _dom.sheet;
+		for(let k in rdata.rules){
+			try{rules[k]=_dom.rule(k,rdata.rules[k],sheet);}catch(e){
+				console.warn('_dom.rules Warning:\nInsertion of rule "'+k+'" failed!\n\n'+e);
 			}
-		};
- 		collect.level=function(ldata,vars){
- 			var obj={},tmp;
- 			for(var prop in ldata){
- 				if(prop.charAt(0)!=='&'){
-					tmp=ldata[prop]+'';
-					Object.keys(vars).forEach(function(k){
-						tmp=tmp.indexOf(k)>-1?tmp.split(k).join(vars[k]):tmp;
-					})
- 					obj[prop]=tmp;
- 				}
- 			}
- 			return obj;
- 		};
- 		collect.childs=function(ldata,pile,vars){
- 			var obj={};
- 			for(var prop in ldata){
- 				if(prop.charAt(0)==='&'){
- 					collect(ldata[prop],prop.substr(1),pile,Object.assign({},vars));
- 				}
- 			}
- 		};
- 		for(var name in data){
- 			collect(data[name],name,[],rootVars);
- 		}
- 		return rules;
+			if(k in rdata.alias)rules[rdata.alias[k]]=rules[k];
+		}
+		return rules;
  	};
+	/**
+	 * Transform sass like data to css like data.
+	 * @parameter {object} datas sass like structured object
+	 * @returns {object(rules:object,alias:object)} data with css rules and aliases.
+	 */
+	_dom.getRulesData=function(data){
+		let res={rules:{},alias:{}};
+		let collect=function(dat,vars,pile){
+			let obj={},rname;
+			if(pile.length)rname=pile.join('');
+			for(let prop in dat){
+				let c=prop.charAt(0);
+				if(c==='$'){
+					vars[prop.substr(1)]=dat[prop];
+				}else if(c==='@'){// todo : media query,animation,fonts etc..
+					// if(prop.indexOf('@media')===0){}
+				}else if(!pile.length||c==='&'){
+					(pile.length?prop.substr(1):prop).split(',').forEach(name=>{
+						collect(dat[prop],Object.assign({},vars),pile.concat([name]));
+					});
+				}else if(prop==='alias'){
+					res.alias[rname]=dat[prop];
+				}else{
+					let tmp=dat[prop]+'';
+					Object.keys(vars).forEach(k=>{
+						tmp=tmp.indexOf(k)>-1?tmp.split(k).join(vars[k]):tmp;
+					});
+					obj[prop]=tmp;
+				}
+			}
+			if(rname)res.rules[rname]=obj;
+		};
+		collect(data,{},[]);
+		return res;
+	};
 
 	// -- css classes
 
@@ -317,6 +317,7 @@ var _dom=(function(){
 	/**
 	check if a model has allready been shadowed.
 	* @parameter {string} tagName the model name.
+	* @returns {boolean}
 	*/
 	_dom.modelShadowed = function (tagName) {
 		return !!_models[tagName].shadow;

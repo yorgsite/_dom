@@ -25,10 +25,10 @@ This documentation have been generated from the [code source](_dom.master.js) js
 
 
 `_dom(tagName,datas,childs,nameSpace)`
-+ `string` **tagName** : the element tagname
-+ `object` **datas** [optional] : element attributes.
-+ `Array` **childs** [optional] : element childs. can contain strings an html elements.
-+ `string` **nameSpace** [optional] : element namesapace if any.
++ ![#ee9900](https://via.placeholder.com/15/1589F0/000000?text=+) `string` **tagName** : the element tagname
++ ![#ee9900](https://via.placeholder.com/15/1589F0/000000?text=+) `object` **datas** [optional] : element attributes.
++ ![#ee9900](https://via.placeholder.com/15/1589F0/000000?text=+) `Array` **childs** [optional] : element childs. can contain strings an html elements.
++ ![#ee9900](https://via.placeholder.com/15/1589F0/000000?text=+) `string` **nameSpace** [optional] : element namesapace if any.
 + **return**<br/> `HTMLElement` : a new html element
 
 [▲](#main_menu)
@@ -42,10 +42,10 @@ This documentation have been generated from the [code source](_dom.master.js) js
 
 
 `_dom.model(tagName,constructor,cssRules,shadowed)`
-+ `string` **tagName** : the custom element name. Should contain at least one "-" to avoid conflict with natives HTMLElements.
-+ `function` **constructor** : receive the arguments of _dom but the dont have to respect the nomenclature excepted 'tagName'. Must return an HTMLElement.NB:constructor Must be a function and NOT a lambda expression because it is scoped to its interface.
-+ `object|function` **cssRules** [optional] : is or returns an object describing rules like _dom.rules,<br/>but the created collection will be insancied only once and shared among interfaces.<br/>Adds the 'rules' property to the interface.
-+ `boolean` **shadowed** [optional] : If true, your model is instanciable via html. See _dom.modelShadow.
++ ![#ee9900](https://via.placeholder.com/15/1589F0/000000?text=+) `string` **tagName** : the custom element name. Should contain at least one "-" to avoid conflict with natives HTMLElements.
++ ![#ee9900](https://via.placeholder.com/15/1589F0/000000?text=+) `function` **constructor** : receive the arguments of _dom but the dont have to respect the nomenclature excepted 'tagName'. Must return an HTMLElement.NB:constructor Must be a function and NOT a lambda expression because it is scoped to its interface.
++ ![#ee9900](https://via.placeholder.com/15/1589F0/000000?text=+) `object|function` **cssRules** [optional] : is or returns an object describing rules like _dom.rules,<br/>but the created collection will be insancied only once and shared among interfaces.<br/>Adds the 'rules' property to the interface.
++ ![#ee9900](https://via.placeholder.com/15/1589F0/000000?text=+) `boolean` **shadowed** [optional] : If true, your model is instanciable via html. See _dom.modelShadow.
 
 [▲](#main_menu)
 
@@ -58,7 +58,7 @@ Checks if a model have been declared.
 
 
 `_dom.has(tagName)`
-+ `string` **tagName** : : the name of the model
++ ![#ee9900](https://via.placeholder.com/15/1589F0/000000?text=+) `string` **tagName** : : the name of the model
 + **return**<br/> `boolean` : true if tagName exists.
 
 [▲](#main_menu)
@@ -72,8 +72,8 @@ Checks if a model have been declared.
 
 
 `_dom.instance(tagName,___)`
-+ `string` **tagName**
-+ `...` **___** : whatever arguments the model constructor uses
++ ![#ee9900](https://via.placeholder.com/15/1589F0/000000?text=+) `string` **tagName**
++ ![#ee9900](https://via.placeholder.com/15/1589F0/000000?text=+) `...` **___** : whatever arguments the model constructor uses
 + **return**<br/> `ModelInstance` : an object with the 'dom' property as the root HTMLElement.
 
 [▲](#main_menu)
@@ -87,8 +87,8 @@ Checks if a model have been declared.
 
 
 `_dom.rule(selector,datas)`
-+ `string` **selector** : the new rule css query.
-+ `object` **datas** [optional] : style datas.
++ ![#ee9900](https://via.placeholder.com/15/1589F0/000000?text=+) `string` **selector** : the new rule css query.
++ ![#ee9900](https://via.placeholder.com/15/1589F0/000000?text=+) `object` **datas** [optional] : style datas.
 + **return**<br/> `CSSStyleRule`
 
 [▲](#main_menu)
@@ -102,7 +102,7 @@ Checks if a model have been declared.
 
 
 `_dom.rules(datas)`
-+ `object` **datas** : sass like structured object
++ ![#ee9900](https://via.placeholder.com/15/1589F0/000000?text=+) `object` **datas** : sass like structured object
 + **return**<br/> `collection<CSSStyleRule>`
 
 [▲](#main_menu)
@@ -116,7 +116,7 @@ check if a model has allready been shadowed.
 
 
 `_dom.modelShadowed(tagName)`
-+ `string` **tagName** : the model name.
++ ![#ee9900](https://via.placeholder.com/15/1589F0/000000?text=+) `string` **tagName** : the model name.
 
 [▲](#main_menu)
 
@@ -129,6 +129,6 @@ renders your model intanciable via html by using dom shadow
 
 
 `_dom.modelShadow(tagName)`
-+ `string` **tagName** : the model name.
++ ![#ee9900](https://via.placeholder.com/15/1589F0/000000?text=+) `string` **tagName** : the model name.
 
 [▲](#main_menu)

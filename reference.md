@@ -25,11 +25,11 @@ This documentation have been generated from the [code source](_dom.master.js) js
 
 
 `_dom(tagName,datas,childs,nameSpace)`
-+ ![#ee9900](https://via.placeholder.com/15/1589F0/000000?text=+) `string` **tagName** : the element tagname
-+ ![#ee9900](https://via.placeholder.com/15/1589F0/000000?text=+) `object` **datas** [optional] : element attributes.
-+ ![#ee9900](https://via.placeholder.com/15/1589F0/000000?text=+) `Array` **childs** [optional] : element childs. can contain strings an html elements.
-+ ![#ee9900](https://via.placeholder.com/15/1589F0/000000?text=+) `string` **nameSpace** [optional] : element namesapace if any.
-+ **return**<br/> `HTMLElement` : a new html element
++ ![](https://via.placeholder.com/15/1589F0/000000?text=+) `string`![](https://via.placeholder.com/100x18/cccccc/000000?text=%20string%20) **tagName** : the element tagname
++ ![](https://via.placeholder.com/15/1589F0/000000?text=+) `object`![](https://via.placeholder.com/100x18/cccccc/000000?text=%20object%20) **datas** [optional] : element attributes.
++ ![](https://via.placeholder.com/15/1589F0/000000?text=+) `Array`![](https://via.placeholder.com/100x18/cccccc/000000?text=%20Array%20) **childs** [optional] : element childs. can contain strings an html elements.
++ ![](https://via.placeholder.com/15/1589F0/000000?text=+) `string`![](https://via.placeholder.com/100x18/cccccc/000000?text=%20string%20) **nameSpace** [optional] : element namesapace if any.
++ ![](https://via.placeholder.com/15/ee9900/000000?text=+) **return**<br/> `HTMLElement`![](https://via.placeholder.com/100x18/cccccc/000000?text=%20HTMLElement%20) : a new html element
 
 [▲](#main_menu)
 
@@ -42,10 +42,10 @@ This documentation have been generated from the [code source](_dom.master.js) js
 
 
 `_dom.model(tagName,constructor,cssRules,shadowed)`
-+ ![#ee9900](https://via.placeholder.com/15/1589F0/000000?text=+) `string` **tagName** : the custom element name. Should contain at least one "-" to avoid conflict with natives HTMLElements.
-+ ![#ee9900](https://via.placeholder.com/15/1589F0/000000?text=+) `function` **constructor** : receive the arguments of _dom but the dont have to respect the nomenclature excepted 'tagName'. Must return an HTMLElement.NB:constructor Must be a function and NOT a lambda expression because it is scoped to its interface.
-+ ![#ee9900](https://via.placeholder.com/15/1589F0/000000?text=+) `object|function` **cssRules** [optional] : is or returns an object describing rules like _dom.rules,<br/>but the created collection will be insancied only once and shared among interfaces.<br/>Adds the 'rules' property to the interface.
-+ ![#ee9900](https://via.placeholder.com/15/1589F0/000000?text=+) `boolean` **shadowed** [optional] : If true, your model is instanciable via html. See _dom.modelShadow.
++ ![](https://via.placeholder.com/15/1589F0/000000?text=+) `string`![](https://via.placeholder.com/100x18/cccccc/000000?text=%20string%20) **tagName** : the custom element name. Should contain at least one "-" to avoid conflict with natives HTMLElements.
++ ![](https://via.placeholder.com/15/1589F0/000000?text=+) `function`![](https://via.placeholder.com/100x18/cccccc/000000?text=%20function%20) **constructor** : receive the arguments of _dom but the dont have to respect the nomenclature excepted 'tagName'. Must return an HTMLElement.NB:constructor Must be a function and NOT a lambda expression because it is scoped to its interface.
++ ![](https://via.placeholder.com/15/1589F0/000000?text=+) `object|function`![](https://via.placeholder.com/100x18/cccccc/000000?text=%20object%7Cfunction%20) **cssRules** [optional] : is or returns an object describing rules like _dom.rules,<br/>but the created collection will be insancied only once and shared among interfaces.<br/>Adds the 'rules' property to the interface.
++ ![](https://via.placeholder.com/15/1589F0/000000?text=+) `boolean`![](https://via.placeholder.com/100x18/cccccc/000000?text=%20boolean%20) **shadowed** [optional] : If true, your model is instanciable via html. See _dom.modelShadow.
 
 [▲](#main_menu)
 
@@ -58,8 +58,8 @@ Checks if a model have been declared.
 
 
 `_dom.has(tagName)`
-+ ![#ee9900](https://via.placeholder.com/15/1589F0/000000?text=+) `string` **tagName** : : the name of the model
-+ **return**<br/> `boolean` : true if tagName exists.
++ ![](https://via.placeholder.com/15/1589F0/000000?text=+) `string`![](https://via.placeholder.com/100x18/cccccc/000000?text=%20string%20) **tagName** : : the name of the model
++ ![](https://via.placeholder.com/15/ee9900/000000?text=+) **return**<br/> `boolean`![](https://via.placeholder.com/100x18/cccccc/000000?text=%20boolean%20) : true if tagName exists.
 
 [▲](#main_menu)
 
@@ -72,9 +72,9 @@ Checks if a model have been declared.
 
 
 `_dom.instance(tagName,___)`
-+ ![#ee9900](https://via.placeholder.com/15/1589F0/000000?text=+) `string` **tagName**
-+ ![#ee9900](https://via.placeholder.com/15/1589F0/000000?text=+) `...` **___** : whatever arguments the model constructor uses
-+ **return**<br/> `ModelInstance` : an object with the 'dom' property as the root HTMLElement.
++ ![](https://via.placeholder.com/15/1589F0/000000?text=+) `string`![](https://via.placeholder.com/100x18/cccccc/000000?text=%20string%20) **tagName**
++ ![](https://via.placeholder.com/15/1589F0/000000?text=+) `...`![](https://via.placeholder.com/100x18/cccccc/000000?text=%20...%20) **___** : whatever arguments the model constructor uses
++ ![](https://via.placeholder.com/15/ee9900/000000?text=+) **return**<br/> `ModelInstance`![](https://via.placeholder.com/100x18/cccccc/000000?text=%20ModelInstance%20) : an object with the 'dom' property as the root HTMLElement.
 
 [▲](#main_menu)
 
@@ -87,9 +87,9 @@ Checks if a model have been declared.
 
 
 `_dom.rule(selector,datas)`
-+ ![#ee9900](https://via.placeholder.com/15/1589F0/000000?text=+) `string` **selector** : the new rule css query.
-+ ![#ee9900](https://via.placeholder.com/15/1589F0/000000?text=+) `object` **datas** [optional] : style datas.
-+ **return**<br/> `CSSStyleRule`
++ ![](https://via.placeholder.com/15/1589F0/000000?text=+) `string`![](https://via.placeholder.com/100x18/cccccc/000000?text=%20string%20) **selector** : the new rule css query.
++ ![](https://via.placeholder.com/15/1589F0/000000?text=+) `object`![](https://via.placeholder.com/100x18/cccccc/000000?text=%20object%20) **datas** [optional] : style datas.
++ ![](https://via.placeholder.com/15/ee9900/000000?text=+) **return**<br/> `CSSStyleRule`![](https://via.placeholder.com/100x18/cccccc/000000?text=%20CSSStyleRule%20)
 
 [▲](#main_menu)
 
@@ -102,8 +102,8 @@ Checks if a model have been declared.
 
 
 `_dom.rules(datas)`
-+ ![#ee9900](https://via.placeholder.com/15/1589F0/000000?text=+) `object` **datas** : sass like structured object
-+ **return**<br/> `collection<CSSStyleRule>`
++ ![](https://via.placeholder.com/15/1589F0/000000?text=+) `object`![](https://via.placeholder.com/100x18/cccccc/000000?text=%20object%20) **datas** : sass like structured object
++ ![](https://via.placeholder.com/15/ee9900/000000?text=+) **return**<br/> `collection<CSSStyleRule>`![](https://via.placeholder.com/100x18/cccccc/000000?text=%20collection%3CCSSStyleRule%3E%20)
 
 [▲](#main_menu)
 
@@ -116,7 +116,7 @@ check if a model has allready been shadowed.
 
 
 `_dom.modelShadowed(tagName)`
-+ ![#ee9900](https://via.placeholder.com/15/1589F0/000000?text=+) `string` **tagName** : the model name.
++ ![](https://via.placeholder.com/15/1589F0/000000?text=+) `string`![](https://via.placeholder.com/100x18/cccccc/000000?text=%20string%20) **tagName** : the model name.
 
 [▲](#main_menu)
 
@@ -129,6 +129,6 @@ renders your model intanciable via html by using dom shadow
 
 
 `_dom.modelShadow(tagName)`
-+ ![#ee9900](https://via.placeholder.com/15/1589F0/000000?text=+) `string` **tagName** : the model name.
++ ![](https://via.placeholder.com/15/1589F0/000000?text=+) `string`![](https://via.placeholder.com/100x18/cccccc/000000?text=%20string%20) **tagName** : the model name.
 
 [▲](#main_menu)

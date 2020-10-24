@@ -2,11 +2,9 @@ node_modules
 doc
 forme
 .gitignore
+*.bat
 package-lock.json
 gitUpdate.js
-gitUpdate.bat
 toolz.js
-compile.bat
 jsdoc.conf.js
-jsdoc.bat
 styl.js

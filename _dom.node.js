@@ -97,7 +97,7 @@ var _dom=(function(){
 			throw('\n_dom.model Error:\nconstructor must be a function.');
 		}
 		_models[tagName]=new _Model(tagName,constructor,cssRules);
-		if(shadowed)_dom.modelShadow(tagName);
+		if(shadowed)_dom.modelShadow(tagName,shadowed);
 	};
 	_dom.has=function(tagName){
 		return tagName in _models;
@@ -110,6 +110,14 @@ var _dom=(function(){
 		}
 		return _models[tagName].instance(arguments);
 	};
+	Object.defineProperty(_dom,'sheet',{
+		get:function(){
+			if (document.styleSheets.length == 0) {
+	 			document.documentElement.appendChild(_dom('style',[""]));
+	 		}
+			return document.styleSheets[document.styleSheets.length - 1];
+		}
+	});
 	_dom.rule = function (selector, datas, sheet) {
 		if(typeof(selector)!=='string'||!selector.length){
 			console.error('----------_dom.rule Error');
@@ -126,14 +134,6 @@ var _dom=(function(){
 		}
 		return rule;
 	};
-	Object.defineProperty(_dom,'sheet',{
-		get:function(){
-			if (document.styleSheets.length == 0) {
-	 			document.documentElement.appendChild(_dom('style',[""]));
-	 		}
-			return document.styleSheets[document.styleSheets.length - 1];
-		}
-	});
 	_dom.rules	= function(data,sheet){
 		let rules={},rdata=_dom.getRulesData(data);
 		if(!(sheet instanceof CSSStyleSheet))sheet = _dom.sheet;
@@ -174,61 +174,40 @@ var _dom=(function(){
 		collect(data,{},[]);
 		return res;
 	};
-	_dom.classNames = function (element) {
-		if(element instanceof HTMLElement){
-			if(element.className&&element.className.length){
-				return element.className.split(/[ \t]+/i);
-			}
-			return [];
-		}else{
-			console.error('----------_dom.classNames Error');
-			console.log('element=',element);
-			throw('\n_dom.classNames Error:\nelement is not an HTMLElement.');
-		}
-	};
-	_dom.hasClass = function (element,className) {
-		try{return _dom.classNames(element).indexOf(className)>-1;
-		}catch(e){throw('\n_dom.hasClass Error from:\n'+e);}
-	};
-	_dom.addClass = function (element,className) {
-		var list;
-		try{list = _dom.classNames(element);
-		}catch(e){throw('\n_dom.addClass Error from:\n'+e);}
-		if(typeof(className)==='string'&&className.length&&list.indexOf(className)===-1){
-			list.push(className);
-			element.className=list.join(' ');
-			return true;
-		}
-	};
-	_dom.removeClass = function (element,className) {
-		var list,id;
-		try{list = _dom.classNames(element);
-		}catch(e){throw('\n_dom.removeClass Error from:\n'+e);}
-		if((id=list.indexOf(className))>-1){
-			list.splice(id,1);
-			element.className=list.join(' ');
-			return true;
-		}
-	};
+	_dom.hasClass = function (element,className) {element.classList.contains(className);};
+	_dom.addClass = function (element,className) {element.classList.add(className);};
+	_dom.removeClass = function (element,className) {element.classList.remove(className);};
 	_dom.swapClass = function (element,classIn,classOut) {
 		_dom.removeClass(element,classOut);
 		_dom.addClass(element,classIn);
 	};
-	let shadowConstructor=function(scope,tagName,args){
+	let shadowConstructor=function(scope,tagName,args,argTypes){
 		let shadow = scope.attachShadow({mode: 'open'});
 		let und,wrapper;
+		argTypes=argTypes||[];
 		let values = args.slice(1)
-		.map(a=>{
-			let attr;
+		.map((a,si)=>{
+			let attr,i=si+1;
 			if(scope.hasAttribute(a)){
 				attr=scope.getAttribute(a);
-				try {attr=JSON.parse(attr);} catch (e) {}
+				if(typeof(argTypes[i])==='function'){
+					attr=argTypes[i](attr);
+				}else if(argTypes[i]==='boolean'){
+					attr=['false','0','off'].indexOf(attr)>-1?false:!!attr.length;
+				}else if(argTypes[i]==='int'){
+					attr=parseInt(attr);
+				}else if(argTypes[i]==='number'){
+					attr=parseFloat(attr);
+				}else if(argTypes[i]==='function'){
+					attr=new Function(''+attr).bind(scope);
+				}else if(argTypes[i]!=='string'){
+					try {attr=JSON.parse(attr);} catch (e) {}
+				}
 			}
 			return attr;
 		});
 		args=[tagName]
 		.concat(values);
-		console.log('args');
 		wrapper=_dom.apply(null,args);
 		shadow.appendChild(wrapper);
 		let rhtml=[],rules=wrapper.__dom.rules;
@@ -238,15 +217,17 @@ var _dom=(function(){
 	_dom.modelShadowed = function (tagName) {
 		return !!_models[tagName].shadow;
 	};
-	_dom.modelShadow = function (tagName) {
+	_dom.modelShadow = function (tagName,argTypes) {
 		if(_models[tagName]){
 			if(_dom.modelShadowed(tagName))return;
+			argTypes=typeof(argTypes)==='object'?argTypes:{};
 			let name=tagName.split('-').map(v=>v.charAt(0).toUpperCase()+v.substr(1)).join('');
 			let args=(_models[tagName].constructor+'').split(')',2)[0].split('(')[1].split(',');
+			let atl=args.map(a=>argTypes.hasOwnProperty(a)?argTypes[a]:0);
 			class _class_ extends HTMLElement {
 				constructor() {
 					super();
-					shadowConstructor(this,tagName,args);
+					shadowConstructor(this,tagName,args,atl);
 				}
 			}
 			_models[tagName].shadow={

@@ -112,7 +112,10 @@ var _dom=(function(){
 	* @parameter {object|function} [cssRules] is or returns an object describing rules like _dom.rules,
 	but the created collection will be insancied only once and shared among interfaces.
 	Adds the 'rules' property to the interface.
-	* @parameter {boolean} [shadowed] If true, your model is instanciable via html. See _dom.modelShadow.
+	* @parameter {boolean|object} [shadowed] If true or object, your model is instanciable via html.
+	*	See _dom.modelShadow.
+	*	if object, shadowed indexes argument types by their name.
+	* @parameter {object} [argTypes] argument types by their name.
 	*/
 	_dom.model=function(tagName,constructor,cssRules,shadowed){
 		// console.log('add model',arguments);
@@ -307,6 +310,7 @@ var _dom=(function(){
 	/**
 	renders your model intanciable via html by using dom shadow
 	* @parameter {string} tagName the model name.
+	* @parameter {object} [argTypes] argument types by their name.
 	*/
 	_dom.modelShadow = function (tagName,argTypes) {
 		if(_models[tagName]){

@@ -110,7 +110,7 @@ var _dom=(function(){
 	* @parameter {string} tagName the custom element name. Should contain at least one "-" to avoid conflict with natives HTMLElements.
 	* @parameter {function} constructor receive the arguments of _dom but the dont have to respect the nomenclature excepted 'tagName'.
 	Must return an HTMLElement.
-	NB:constructor Must be a function and <b>NOT</b> a lambda expression because it is scoped to its interface.
+	<b>NB</b> : constructor Must be a function and <b>NOT a lambda expression</b> because it is scoped to its interface.
 	* @parameter {object|function} [cssRules] is or returns an object describing rules like _dom.rules,
 	but the created collection will be instancied only once and shared among interfaces.
 	Adds the 'rules' property to the interface.

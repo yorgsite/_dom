@@ -108,14 +108,15 @@ var _dom=(function(){
 	* interface['dom'] : dom element;
 	* interface[tagName] : element tagName;
 	* @parameter {string} tagName the custom element name. Should contain at least one "-" to avoid conflict with natives HTMLElements.
-	* @parameter {function} constructor receive the arguments of _dom but the dont have to respect the nomenclature excepted 'tagName'. Must return an HTMLElement.NB:constructor Must be a function and NOT a lambda expression because it is scoped to its interface.
+	* @parameter {function} constructor receive the arguments of _dom but the dont have to respect the nomenclature excepted 'tagName'.
+	Must return an HTMLElement.
+	NB:constructor Must be a function and **NOT** a lambda expression because it is scoped to its interface.
 	* @parameter {object|function} [cssRules] is or returns an object describing rules like _dom.rules,
-	but the created collection will be insancied only once and shared among interfaces.
+	but the created collection will be instancied only once and shared among interfaces.
 	Adds the 'rules' property to the interface.
 	* @parameter {boolean|object} [shadowed] If true or object, your model is instanciable via html.
 	*	See _dom.modelShadow.
-	*	if object, shadowed indexes argument types by their name.
-	* @parameter {object} [argTypes] argument types by their name.
+	*	if object, shadowed is the arguments types by their name.
 	*/
 	_dom.model=function(tagName,constructor,cssRules,shadowed){
 		// console.log('add model',arguments);

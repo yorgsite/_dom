@@ -42,12 +42,11 @@ This documentation have been generated from the [code source](_dom.master.js) js
  Add a custom element to _dom.<br/> NB: the **__dom** property will be added to the element, pointing to it's interface (model instance).<br/> interface['dom'] : dom element;<br/> interface[tagName] : element tagName;
 
 
-`_dom.model(tagName,constructor,cssRules,shadowed,argTypes)`
+`_dom.model(tagName,constructor,cssRules,shadowed)`
 + ![](https://via.placeholder.com/15/158900/000000?text=+) `string` **tagName** : the custom element name. Should contain at least one "-" to avoid conflict with natives HTMLElements.
-+ ![](https://via.placeholder.com/15/158900/000000?text=+) `function` **constructor** : receive the arguments of _dom but the dont have to respect the nomenclature excepted 'tagName'. Must return an HTMLElement.NB:constructor Must be a function and NOT a lambda expression because it is scoped to its interface.
-+ ![](https://via.placeholder.com/15/158900/000000?text=+) `object|function` **cssRules** [optional] : is or returns an object describing rules like _dom.rules,<br/>but the created collection will be insancied only once and shared among interfaces.<br/>Adds the 'rules' property to the interface.
-+ ![](https://via.placeholder.com/15/158900/000000?text=+) `boolean|object` **shadowed** [optional] : If true or object, your model is instanciable via html.<br/>	See _dom.modelShadow.<br/>	if object, shadowed indexes argument types by their name.
-+ ![](https://via.placeholder.com/15/158900/000000?text=+) `object` **argTypes** [optional] : argument types by their name.
++ ![](https://via.placeholder.com/15/158900/000000?text=+) `function` **constructor** : receive the arguments of _dom but the dont have to respect the nomenclature excepted 'tagName'.<br/>Must return an HTMLElement.<br/>*NOT** a lambda expression because it is scoped to its interface.
++ ![](https://via.placeholder.com/15/158900/000000?text=+) `object|function` **cssRules** [optional] : is or returns an object describing rules like _dom.rules,<br/>but the created collection will be instancied only once and shared among interfaces.<br/>Adds the 'rules' property to the interface.
++ ![](https://via.placeholder.com/15/158900/000000?text=+) `boolean|object` **shadowed** [optional] : If true or object, your model is instanciable via html.<br/>	See _dom.modelShadow.<br/>	if object, shadowed is the arguments types by their name.
 
 [▲](#main_menu)
 

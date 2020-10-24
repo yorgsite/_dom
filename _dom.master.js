@@ -108,7 +108,7 @@ var _dom=(function(){
 	* interface['dom'] : dom element;
 	* interface[tagName] : element tagName;
 	* @parameter {string} tagName the custom element name. Should contain at least one "-" to avoid conflict with natives HTMLElements.
-	* @parameter {function} constructor receive the arguments of _dom but the dont have to respect the nomenclature excepted 'tagName'.
+	* @parameter {function} constructor receive the arguments of <b>_dom(...args)</b> but the dont have to respect the nomenclature excepted 'tagName'.
 	Must return an HTMLElement.
 	<b>NB</b> : constructor Must be a function and <b>NOT a lambda expression</b> because it is scoped to its interface.
 	* @parameter {object|function} [cssRules] is or returns an object describing rules like _dom.rules,

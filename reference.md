@@ -44,7 +44,7 @@ This documentation have been generated from the [code source](_dom.master.js) js
 
 `_dom.model(tagName,constructor,cssRules,shadowed)`
 + ![](https://via.placeholder.com/15/158900/000000?text=+) `string` **tagName** : the custom element name. Should contain at least one "-" to avoid conflict with natives HTMLElements.
-+ ![](https://via.placeholder.com/15/158900/000000?text=+) `function` **constructor** : receive the arguments of _dom but the dont have to respect the nomenclature excepted 'tagName'.<br/>Must return an HTMLElement.<br/>*NOT** a lambda expression because it is scoped to its interface.
++ ![](https://via.placeholder.com/15/158900/000000?text=+) `function` **constructor** : receive the arguments of _dom but the dont have to respect the nomenclature excepted 'tagName'.<br/>Must return an HTMLElement.<br/>NB:constructor Must be a function and <b>NOT</b> a lambda expression because it is scoped to its interface.
 + ![](https://via.placeholder.com/15/158900/000000?text=+) `object|function` **cssRules** [optional] : is or returns an object describing rules like _dom.rules,<br/>but the created collection will be instancied only once and shared among interfaces.<br/>Adds the 'rules' property to the interface.
 + ![](https://via.placeholder.com/15/158900/000000?text=+) `boolean|object` **shadowed** [optional] : If true or object, your model is instanciable via html.<br/>	See _dom.modelShadow.<br/>	if object, shadowed is the arguments types by their name.
 

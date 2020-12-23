@@ -29,6 +29,12 @@ var _dom=(function(){
 	};
 
 	_Model.Instance=function(model,args){
+		Object.defineProperty(this,'tagName',{get:function(){return model.tagName;}});
+		if(model.cssRules){
+			var rules=model.getRules();
+			Object.defineProperty(this,'rules',{get:function(){return rules;}});
+		}
+
 		var dom=model.constructor.apply(this,args);
 		if(!(dom instanceof HTMLElement)){
 			console.error('-----------------------');
@@ -42,13 +48,8 @@ var _dom=(function(){
 		if(dom[_modelref]){
 			this._super=dom[_modelref];
 		}
-		Object.defineProperty(this,'tagName',{get:function(){return model.tagName;}});
 		if(!('dom' in this)){
 			Object.defineProperty(this,'dom',{get:function(){return dom;}});
-		}
-		if(model.cssRules){
-			var rules=model.getRules();
-			Object.defineProperty(this,'rules',{get:function(){return rules;}});
 		}
 	};
 
@@ -84,16 +85,7 @@ var _dom=(function(){
 				}
 			 };
 			dataAssign(node,datas,(""+tagName).toUpperCase());
-			if(childs && typeof(childs.length)==='number'){
-				for(var i=0;i<childs.length;i++){
-					if(typeof(childs[i])==="string")node.appendChild(document.createTextNode(childs[i]));
-					else try{node.appendChild(childs[i]);}catch(e){
-						console.error('-----------------------');
-						console.log('childs['+i+']=',childs[i]);
-						console.log('error=',e);
-						throw("parameter childs["+i+"] must be string or dom element.");}
-				}
-			}
+			_dom.append(node,childs);
 	   }catch(err){
 		   console.error('----------_dom Error');
 		   console.log('arguments=',args);
@@ -101,6 +93,22 @@ var _dom=(function(){
 		   throw("_dom Error:\n"+err+"");
 	   }
 	   return node;
+	};
+	_dom.append=function(target,childs){
+		if(!(target instanceof HTMLElement)){
+			throw("_dom.append Error:\nparameter dom must be a dom element.");
+		}
+		if(childs && typeof(childs.length)==='number'){
+			if(typeof(childs)==='string')target.innerHTML+=childs;
+			else for(var i=0;i<childs.length;i++){
+				if(typeof(childs[i])==="string")target.appendChild(document.createTextNode(childs[i]));
+				else try{target.appendChild(childs[i]);}catch(e){
+					console.error('-----------------------');
+					console.log('childs['+i+']=',childs[i]);
+					console.log('error=',e);
+					throw("_dom.append Error:\nparameter childs["+i+"] must be string or dom element.");}
+			}
+		}
 	};
 	/**
 	* Add a custom element to _dom.
@@ -161,6 +169,37 @@ var _dom=(function(){
 	};
 
 	// -------------- css -----------
+	let _propRef={};
+	/**
+	* Get browser native element default css values.
+	* @parameter {string} tagName : tag name of the native element to test
+	* @returns {Map} the default css values.
+	*/
+	_dom.defaultCss=function(tagName){
+		let tgt,r,map;
+		if(tagName instanceof HTMLElement)tgt=tagName;
+		if(tgt||!_propRef.hasOwnProperty(tagName)){
+			let dom,body=document.documentElement;
+			try {
+				dom=document.createElement(tagName);
+				body.appendChild(dom);
+				let cs=window.getComputedStyle(dom);
+				map=new Map();
+				Object.keys(cs)
+				.map(id=>cs[id])
+				.filter(k=>k.charAt(0)!=='-'&&cs[k]!=='')
+				.forEach(k=>map.set(k,cs[k]));
+				if(!tgt)_propRef[tagName]=map;
+				body.removeChild(dom);
+			}catch(e){//in case of other catch
+				if(dom&&dom.parentNode)body.removeChild(dom);
+				throw('\n_dom.properties Error:\n'+e);
+			}
+		}else {
+			map=_propRef[tagName];
+		}
+		return map;
+	};
 	/**
 	*
 	* @property {CSSStyleSheet} _dom.sheet The last available CSSStyleSheet.
@@ -244,7 +283,10 @@ var _dom=(function(){
 					obj[prop]=tmp;
 				}
 			}
-			if(rname)res.rules[rname]=obj;
+			if(rname){
+				if(res.rules[rname])Object.assign(res.rules[rname],obj);
+				else res.rules[rname]=obj;
+			}
 		};
 		collect(data,{},[]);
 		return res;

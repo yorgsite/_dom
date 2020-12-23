@@ -10,6 +10,7 @@ This documentation have been generated from the [code source](_dom.master.js) js
 	+ ![](https://via.placeholder.com/15/6600ee/000000?text=+) [_dom.model](#tgt__dom.model)
 	+ ![](https://via.placeholder.com/15/6600ee/000000?text=+) [_dom.has](#tgt__dom.has)
 	+ ![](https://via.placeholder.com/15/6600ee/000000?text=+) [_dom.instance](#tgt__dom.instance)
+	+ ![](https://via.placeholder.com/15/6600ee/000000?text=+) [_dom.defaultCss](#tgt__dom.defaultCss)
 	+ ![](https://via.placeholder.com/15/0089E0/000000?text=+) [_dom.sheet](#tgt__dom.sheet)
 	+ ![](https://via.placeholder.com/15/6600ee/000000?text=+) [_dom.rule](#tgt__dom.rule)
 	+ ![](https://via.placeholder.com/15/6600ee/000000?text=+) [_dom.rules](#tgt__dom.rules)
@@ -76,6 +77,20 @@ Checks if a model have been declared.
 + ![](https://via.placeholder.com/15/158900/000000?text=+) `string` **tagName**
 + ![](https://via.placeholder.com/15/158900/000000?text=+) `...` **___** : whatever arguments the model constructor uses
 + ![](https://via.placeholder.com/15/ee9900/000000?text=+) **return**<br/> `ModelInstance` : an object with the 'dom' property as the root HTMLElement.
+
+[▲](#main_menu)
+
+<hr/>
+
+#### <a name="tgt__dom.defaultCss"></a> ![](https://via.placeholder.com/15/6600ee/000000?text=+) _dom.defaultCss
+
+
+ Get browser native element default css values.
+
+
+`_dom.defaultCss(tagName)`
++ ![](https://via.placeholder.com/15/158900/000000?text=+) `string` **tagName** : : tag name of the native element to test
++ ![](https://via.placeholder.com/15/ee9900/000000?text=+) **return**<br/> `Map` : the default css values.
 
 [▲](#main_menu)
 

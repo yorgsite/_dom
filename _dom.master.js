@@ -6,6 +6,7 @@ var _dom=(function(){
 	// custom elements handling
 	var _modelref='__dom';
 	var _models={};
+
 	var _Model=function(tagName,constructor,cssRules){
 		var rules;
 		this.tagName	= tagName;
@@ -18,12 +19,14 @@ var _dom=(function(){
 			return rules;
 		};
 	};
+
 	_Model.prototype.build=function(args){
 		var inst=this.instance(args);
 		// keeps reference to constructor scope
 		Object.defineProperty(inst.dom,_modelref,{get:function(){return inst;},configurable:true});
 		return inst.dom;
 	};
+
 	_Model.prototype.instance=function(args){
 		return new _Model.Instance(this,args);
 	};
@@ -168,6 +171,34 @@ var _dom=(function(){
 		return _models[tagName].instance(arguments);
 	};
 
+	
+	_dom.findParent=function(dom,condition,maxDeep=10){
+		let errs=[];
+		if(!(dom instanceof HTMLElement))errs.push('arg[0] "dom" is not an HTMLElement.');
+		if(typeof(condition)!=='function')errs.push('arg[1] "condition" is not a function.');
+		if(typeof(maxDeep)!=='number'||maxDeep<2)errs.push('arg[2] "maxDeep" is not a number with a value > 1 ."');
+		if(errs.length){
+			console.error('----------_dom.findParent Error');
+			console.log('arguments=',arguments);
+			throw('\n_dom.findParent Error:\n'+errs.map(e=>'	- '+e).join('\n'));
+		}
+		for(let i=0;i<maxDeep&&dom.parentNode;i++){
+			if(condition(dom))return dom;
+			dom=dom.parentNode;
+		}
+	}
+
+	_dom.events=function(dom,events){
+		(events instanceof Array?events:[events])
+		.forEach(evt=>{
+			(evt.type instanceof Array?evt.type:[evt.type])
+			.forEach(t=>dom.addEventListener(evt.type,evt.callback));
+		});
+
+	};
+
+	Object.defineProperty(_dom,'models',{get:function(){return Object.keys(_models)}});
+
 	// -------------- css -----------
 	let _propRef={};
 	/**
@@ -200,6 +231,12 @@ var _dom=(function(){
 		}
 		return map;
 	};
+
+	Object.defineProperty(_dom,'uid',{
+		get:()=>Date.now().toString(16)+'-'+Math.floor(Math.random()*1E12).toString(16)
+	});
+
+
 	/**
 	*
 	* @property {CSSStyleSheet} _dom.sheet The last available CSSStyleSheet.
@@ -239,9 +276,17 @@ var _dom=(function(){
 	/**
 	 * Create a collection of cssRule objects;
 	 * @parameter {object} datas sass like structured object
+	 * @parameter {CSSStyleSheet} [sheet] target stylesheet
+	 * @parameter {string} [uniquePrefix] if set, will encapsulate datas with a unique className.
+	 * an object {className:string,rules:object([ruleName]:CSSStyleRule} will be returned.
 	 * @returns {object([ruleName]:CSSStyleRule)}
 	 */
-	_dom.rules	= function(data,sheet){
+	_dom.rules	= function(data,sheet,uniquePrefix=''){
+		let className='';
+		if(uniquePrefix){
+			className=uniquePrefix+'-'+_dom.uid;
+			data={['.'+className]:data};
+		}
 		let rules={},rdata=_dom.getRulesData(data);
 		if(!(sheet instanceof CSSStyleSheet))sheet = _dom.sheet;
 		for(let k in rdata.rules){
@@ -250,7 +295,7 @@ var _dom=(function(){
 			}
 			if(k in rdata.alias)rules[rdata.alias[k]]=rules[k];
 		}
-		return rules;
+		return className?{className,rules}:rules;
  	};
 
 	/**
@@ -291,16 +336,18 @@ var _dom=(function(){
 		collect(data,{},[]);
 		return res;
 	};
-
-	// -- css classes
-
-	// legacy --- may completly desepear in further version
-	_dom.hasClass = function (element,className) {element.classList.contains(className);};
-	_dom.addClass = function (element,className) {element.classList.add(className);};
-	_dom.removeClass = function (element,className) {element.classList.remove(className);};
-	_dom.swapClass = function (element,classIn,classOut) {
-		_dom.removeClass(element,classOut);
-		_dom.addClass(element,classIn);
+	
+	_dom.modelRules=function(modelNames,sheet=0){
+		let robj={};
+		(modelNames.constructor.name==='Array'?modelNames:[modelNames])
+		.forEach(mn=>{
+			if(_models[mn]){
+				let rulz=_models[mn].getRules();
+				for(let k in rulz)robj[k]=rulz[k];
+			}
+		});
+		if(sheet)for(let k in robj)sheet.insertRule(robj[k].cssText);
+		return robj;
 	};
 
 	//	---- shadow dom

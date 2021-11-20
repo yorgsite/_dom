@@ -14,8 +14,8 @@
 				var list=[];
 				var doms={};
 				var build=function(){
-					doms.head=_dom('div',{});
-					doms.body=_dom('div',{});
+					doms.head=_dom('div',{className:'dom-tabs-head'});
+					doms.body=_dom('div',{className:'dom-tabs-body'});
 					doms.table=_dom('table',{border:'0',cellSpacing:'0',cellPadding:'0',
 					className:'dom-tabs'+(className?' '+className:'')},[
 						_dom('tbody',{},[
@@ -31,7 +31,7 @@
 				Object.defineProperty(this,'familly',{get:function(){return familly;}});
 				Object.defineProperty(this,'doms',{get:function(){return doms;}});
 				Object.defineProperty(this,'length',{get:function(){return list.length;}});
-				console.log('dom-tabs scope.familly',scope.familly,' familly',familly);
+				// console.log('dom-tabs scope.familly',scope.familly,' familly',familly);
 				var byId=function(id){
 					for(var i=0;i<list.length;i++){
 						if(list[i].id===id){
@@ -134,53 +134,62 @@
 				}
 			});
 
-			var idcnt=1;
-			var Unit=function(label,content,tabs){
-				var unit=this;
-				this.tabs=tabs;
-				this.id=idcnt++;
-				this.label=label;
-				this.content=content;
-				this.doms={};
-				this.doms.label=_dom('span',{
-					onclick:function(){
-						unit.tabs.select(unit.tabs.byId(unit.id));
-					}
-				},[label]);
-				if(unit.tabs.familly && DragPipe){
-					DragPipe.registerDrag(this.doms.label,function(){
-						return {
-							unit:unit
+			let idcnt=1,dragdata=null;
+			class Unit{
+				constructor(label,content,tabs){
+					this.tabs=tabs;
+					this.id=idcnt++;
+					this.label=label;
+					this.content=content;
+					this.doms={};
+	
+					this._init();
+				}
+				_init(){
+					this.doms.label=_dom('span',{
+						onclick:()=>{
+							this.tabs.select(this.tabs.byId(this.id));
+						}
+					},[this.label]);
+	
+					// drag & drop
+					if(this.tabs.familly){
+						this.doms.label.draggable=1;
+						this.doms.label.ondragstart=(evt)=>{
+							dragdata={unit:this};
 						};
-					});
-					DragPipe.registerDrop(this.doms.label,function(data){
-						if(data.unit instanceof Unit){
-							// if(data.unit.tabs.length===1)return;
-							if(data.unit.tabs.length>1&&data.unit.tabs.familly===unit.tabs.familly){
-								var id_to=unit.byId();
-								if(unit.tabs===data.unit.tabs){
-									var id_from=data.unit.byId();
-									data.unit.remove();
-									unit.tabs.add(data.unit,0,id_to>id_from?id_to:id_to);
-								}else{
-									data.unit.remove();
-									unit.tabs.add(data.unit,0,id_to);
+						this.doms.label.ondragover=function(evt){evt.preventDefault();};
+						this.doms.label.ondrop=(evt)=>{
+							let data=dragdata;
+							// let data=dragdata?dragdata;
+							dragdata=null;
+							if(data&&data.unit instanceof Unit){
+								if(data.unit.tabs.length>1&&data.unit.tabs.familly===this.tabs.familly){
+									var id_to=this.byId();
+									if(this.tabs===data.unit.tabs){
+										var id_from=data.unit.byId();
+										data.unit.remove();
+										this.tabs.add(data.unit,0,id_to>id_from?id_to:id_to);
+									}else{
+										data.unit.remove();
+										this.tabs.add(data.unit,0,id_to);
+									}
 								}
 							}
-						}
-					});
+						};
+					}
+	
+					this.doms.content=_dom('div',{},[this.content]);
 				}
-
-				this.doms.content=_dom('div',{},[content]);
-
-				this.remove=function(){
-					unit.tabs.remove(unit.id);
-				};
-				this.byId=function(){
-					return unit.tabs.byId(unit.id);
-				};
-				this.selected=function(){
-					return unit.doms.label.className.indexOf('selected')>-1;
-				};
-			};
+				remove(){
+					this.tabs.remove(this.id);
+				}
+				byId(){
+					return this.tabs.byId(this.id);
+				}
+				selected(){
+					return this.doms.label.className.indexOf('selected')>-1;
+				}
+			}
+			
 		})();

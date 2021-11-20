@@ -8,3 +8,4 @@ gitUpdate.js
 toolz.js
 jsdoc.conf.js
 styl.js
+*.d.ts

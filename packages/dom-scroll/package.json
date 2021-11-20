@@ -1,0 +1,29 @@
+{
+	"name": "@dom-for-node/dom-scroll",
+	"version": "1.0.0",
+	"description": "a customisable bindable scrollbar",
+	"main": "dom-scroll.model.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"pub": "npm version patch && npm publish --access=public"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/yorgsite/-dom-for-node-dom-scroll.git"
+	},
+	"keywords": [
+		"dom-for-node",
+		"_dom.js",
+		"element",
+		"scrollbar",
+		"html",
+		"js",
+		"model"
+	],
+	"author": "yorg",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/yorgsite/-dom-for-node-dom-scroll/issues"
+	},
+	"homepage": "https://github.com/yorgsite/-dom-for-node-dom-scroll#readme"
+}

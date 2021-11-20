@@ -117,6 +117,29 @@ var _dom=(function(){
 		}
 		return _models[tagName].instance(arguments);
 	};
+	_dom.findParent=function(dom,condition,maxDeep=10){
+		let errs=[];
+		if(!(dom instanceof HTMLElement))errs.push('arg[0] "dom" is not an HTMLElement.');
+		if(typeof(condition)!=='function')errs.push('arg[1] "condition" is not a function.');
+		if(typeof(maxDeep)!=='number'||maxDeep<2)errs.push('arg[2] "maxDeep" is not a number with a value > 1 ."');
+		if(errs.length){
+			console.error('----------_dom.findParent Error');
+			console.log('arguments=',arguments);
+			throw('\n_dom.findParent Error:\n'+errs.map(e=>'	- '+e).join('\n'));
+		}
+		for(let i=0;i<maxDeep&&dom.parentNode;i++){
+			if(condition(dom))return dom;
+			dom=dom.parentNode;
+		}
+	}
+	_dom.events=function(dom,events){
+		(events instanceof Array?events:[events])
+		.forEach(evt=>{
+			(evt.type instanceof Array?evt.type:[evt.type])
+			.forEach(t=>dom.addEventListener(evt.type,evt.callback));
+		});
+	};
+	Object.defineProperty(_dom,'models',{get:function(){return Object.keys(_models)}});
 	let _propRef={};
 	_dom.defaultCss=function(tagName){
 		let tgt,r,map;
@@ -209,6 +232,18 @@ var _dom=(function(){
 		};
 		collect(data,{},[]);
 		return res;
+	};
+	_dom.modelRules=function(modelNames,sheet=0){
+		let robj={};
+		(modelNames.constructor.name==='Array'?modelNames:[modelNames])
+		.forEach(mn=>{
+			if(_models[mn]){
+				let rulz=_models[mn].getRules();
+				for(let k in rulz)robj[k]=rulz[k];
+			}
+		});
+		if(sheet)for(let k in robj)sheet.insertRule(robj[k].cssText);
+		return robj;
 	};
 	_dom.hasClass = function (element,className) {element.classList.contains(className);};
 	_dom.addClass = function (element,className) {element.classList.add(className);};

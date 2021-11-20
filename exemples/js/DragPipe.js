@@ -1,32 +1,26 @@
-var DragPipe=new function(){
-	var scope=this;
-	var idcnt=1;
-	var datas={};
-	var transfer_id='dragpipe';
-	this.drag=function(evt,data){
-		var _id=''+(idcnt++);
-		datas[_id]=data;
-		evt.dataTransfer.setData(transfer_id,_id);
-	};
-	this.drop=function(evt){
-		evt.preventDefault();
-		var _id=evt.dataTransfer.getData(transfer_id);
-		if(_id in datas){
-			var data=datas[_id];
-			delete datas[_id];
-			return data;
+
+const DragPipe=new ((function(){
+	return class DragPipe{
+		constructor(){
+			this._datas={};
 		}
-	};
-	this.registerDrag=function(element,getData){
-		element.draggable=1;
-		element.ondragstart=function(evt){
-			DragPipe.drag(evt,getData());
-		};
-	};
-	this.registerDrop=function(element,callback){
-		element.ondragover=function(evt){evt.preventDefault();};
-		element.ondrop=function(evt){
-			callback(DragPipe.drop(evt));
-		};
-	};
-}();
+		registerDrag(element,getData,family='all'){
+			element.draggable=1;
+			element.ondragstart=(evt)=>{
+				this._datas[family]=getData();
+			}
+		}
+		registerDrop(element,callback,family='all'){
+			element.ondragover=(evt)=>evt.preventDefault();
+			element.ondrop=(evt)=>{
+				evt.preventDefault();
+				if(family in this._datas){
+					callback(this._datas[family]);
+				}
+				this._datas={};
+			};
+		}
+	}
+})())();
+
+// module.exports={DragPipe};

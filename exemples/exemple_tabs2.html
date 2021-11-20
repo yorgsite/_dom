@@ -4,7 +4,7 @@
 		<meta charset="utf-8" />
 		<title>Tabs component exemple</title>
 		<script src="../_dom.js"></script>
-		<script src="components/dom-tabs.component.js"></script>
+		<script src="components/dom-tabs.model.js"></script>
 		<script src="js/DragPipe.js"></script>
 		<script>
 		// css
@@ -172,10 +172,11 @@
 				for(var r=0;r<tl_root.length;r++){
 					for(var i=0,content;i<nb_a;i++){
 						content=_dom('dom-tabs','tabs-b','tabsB');
+						// content=_dom('dom-tabs','tabs-b','tabsB');
 						for(var j=0;j<nb_b;j++){
-							randtab(content.__dom);
+							randtab(content);
 						}
-						tl_root[r].__dom.add('Main Tab '+(r*nb_a+i),content);
+						tl_root[r].add('Main Tab '+(r*nb_a+i),content);
 					}
 					document.body.appendChild(tl_root[r]);
 				}

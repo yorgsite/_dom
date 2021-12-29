@@ -130,8 +130,10 @@ Property
  Create a collection of cssRule objects;
 
 
-`_dom.rules(datas)`
+`_dom.rules(datas,sheet,uniquePrefix)`
 + ![](https://via.placeholder.com/15/158900/000000?text=+) `object` **datas** : sass like structured object
++ ![](https://via.placeholder.com/15/158900/000000?text=+) `CSSStyleSheet` **sheet** [optional] : target stylesheet
++ ![](https://via.placeholder.com/15/158900/000000?text=+) `string` **uniquePrefix** [optional] : if set, will encapsulate datas with a unique className.<br/> an object {className:string,rules:object([ruleName]:CSSStyleRule} will be returned.
 + ![](https://via.placeholder.com/15/ee9900/000000?text=+) **return**<br/> `object([ruleName]:CSSStyleRule)`
 
 [▲](#main_menu)

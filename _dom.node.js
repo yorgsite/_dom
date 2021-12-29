@@ -1,64 +1,68 @@
-var _dom=(function(){
+const _dom=(function(){
 	if(window._dom)return window._dom;
-	var _modelref='__dom';
-	var _models={};
-	var _Model=function(tagName,constructor,cssRules){
-		var rules;
-		this.tagName	= tagName;
-		this.constructor= constructor;
-		this.cssRules	= typeof(cssRules)==='function'?cssRules:(typeof(cssRules)==='object'?function(){return cssRules;}:0);
-		this.getRules	= function(args){
-			if(this.cssRules&&!rules){
-				rules=_dom.rules(this.cssRules());
+	let _modelref='__dom';
+	const _models={};
+	class _Model{
+		constructor(tagName,constructor,cssRules){
+			let rules;
+			this.tagName	= tagName;
+			this.constructor= constructor;
+			this.cssRules	= typeof(cssRules)==='function'?cssRules:(typeof(cssRules)==='object'?function(){return cssRules;}:0);
+			this.getRules	= function(args){
+				if(this.cssRules&&!rules){
+					rules=_dom.rules(this.cssRules());
+				}
+				return rules;
+			};
+		}
+		build(args){
+			var inst=this.instance(args);
+			Object.defineProperty(inst.dom,_modelref,{get:function(){return inst;},configurable:true});
+			return inst.dom;
+		}
+		instance(args){
+			return new _ModelInstance(this,args);
+		}
+	}
+	class _ModelInstance{
+		constructor(model,args){
+			Object.defineProperty(this,'tagName',{get:function(){return model.tagName;}});
+			if(model.cssRules){
+				var rules=model.getRules();
+				Object.defineProperty(this,'rules',{get:function(){return rules;}});
 			}
-			return rules;
-		};
-	};
-	_Model.prototype.build=function(args){
-		var inst=this.instance(args);
-		Object.defineProperty(inst.dom,_modelref,{get:function(){return inst;},configurable:true});
-		return inst.dom;
-	};
-	_Model.prototype.instance=function(args){
-		return new _Model.Instance(this,args);
-	};
-	_Model.Instance=function(model,args){
-		Object.defineProperty(this,'tagName',{get:function(){return model.tagName;}});
-		if(model.cssRules){
-			var rules=model.getRules();
-			Object.defineProperty(this,'rules',{get:function(){return rules;}});
+			var dom=model.constructor.apply(this,args);
+			if(!(dom instanceof HTMLElement)){
+				console.error('-----------------------');
+				console.log('tagName=',model.tagName);
+				console.log('constructor=',model.constructor);
+				console.log('this.dom=',dom);
+				throw('\n_dom.model Error:\nconstructor must return an HTMLElement.');
+			}
+			if(dom[_modelref]){
+				this._super=dom[_modelref];
+			}
+			if(!('dom' in this)){
+				Object.defineProperty(this,'dom',{get:function(){return dom;}});
+			}	
 		}
-		var dom=model.constructor.apply(this,args);
-		if(!(dom instanceof HTMLElement)){
-			console.error('-----------------------');
-			console.log('tagName=',model.tagName);
-			console.log('constructor=',model.constructor);
-			console.log('this.dom=',dom);
-			throw('\n_dom.model Error:\nconstructor must return an HTMLElement.');
-		}
-		if(dom[_modelref]){
-			this._super=dom[_modelref];
-		}
-		if(!('dom' in this)){
-			Object.defineProperty(this,'dom',{get:function(){return dom;}});
-		}
-	};
-	var _dom=function(tagName,datas,childs,nameSpace){
-		var args=arguments;
+	}
+	const _dom=function(tagName,datas,childs,nameSpace){
+		let args=arguments;
 		if(tagName in _models){
 			return _models[tagName].build(args);
 		}
 		try{
-			var node = typeof(nameSpace)==="string"?
+			let node = typeof(nameSpace)==="string"?
 				document.createElementNS(nameSpace,tagName):
 				document.createElement(tagName);
 			if(!childs && (datas instanceof Array)){
 				childs=datas;
 				datas={};
 			}
-			var dataAssign=function(tgt,src,dataname){
+			let dataAssign=function(tgt,src,dataname){
 				if(typeof(tgt)==="undefined")throw("property '"+dataname+"' doesn't exist.");
-				for(var i in src){
+				for(let i in src){
 					if(typeof(src[i])==="object")
 					dataAssign(tgt[i],src[i],dataname+"."+i)
 					else tgt[i] = src[i];
@@ -80,7 +84,7 @@ var _dom=(function(){
 		}
 		if(childs && typeof(childs.length)==='number'){
 			if(typeof(childs)==='string')target.innerHTML+=childs;
-			else for(var i=0;i<childs.length;i++){
+			else for(let i=0;i<childs.length;i++){
 				if(typeof(childs[i])==="string")target.appendChild(document.createTextNode(childs[i]));
 				else try{target.appendChild(childs[i]);}catch(e){
 					console.error('-----------------------');
@@ -166,6 +170,9 @@ var _dom=(function(){
 		}
 		return map;
 	};
+	Object.defineProperty(_dom,'uid',{
+		get:()=>Date.now().toString(16)+'-'+Math.floor(Math.random()*1E12).toString(16)
+	});
 	Object.defineProperty(_dom,'sheet',{
 		get:function(){
 			if (document.styleSheets.length == 0) {
@@ -174,36 +181,55 @@ var _dom=(function(){
 			return document.styleSheets[document.styleSheets.length - 1];
 		}
 	});
-	_dom.rule = function (selector, datas, sheet) {
+	const _rule = function (selector, datas, sheet,rootRules,aliases) {
 		if(typeof(selector)!=='string'||!selector.length){
 			console.error('----------_dom.rule Error');
 			console.log('selector=',selector);
 			throw('\n_dom.rule Error:\nselector is not a valid css query.');
 		}
 		if(!(sheet instanceof CSSStyleSheet))sheet = _dom.sheet;
+		if(debug)console.log('insert rule %c'+selector,'color:#086');
 		sheet.insertRule(selector + "{\n\n}", sheet.cssRules.length);
-		var rule = sheet.cssRules[sheet.cssRules.length - 1];
+		let rule = sheet.cssRules[sheet.cssRules.length - 1];
 		if (datas) {
-			for (var name in datas) {
-				rule.style[name] = datas[name];
-			}
+			let iterRules=(dat,tgt)=>{
+				for (let name in dat) {
+					if(debug)console.log('add style',name,dat[name]);
+					if(typeof(dat[name])==='object'){
+						rule.appendRule(name+'{\n\n}');
+						iterRules(dat[name],rule.cssRules[rule.cssRules.length-1]);
+					}else{
+						tgt.style[name] = dat[name];
+					}
+					if(rootRules&&name in aliases)rootRules[aliases[name]]=rootRules[name];
+				}
+			};
+			iterRules(datas,rule);
 		}
 		return rule;
 	};
-	_dom.rules	= function(data,sheet){
+	_dom.rule = function (selector, datas, sheet) {
+		return _rule(selector, datas, sheet);
+	};
+	_dom.rules	= function(data,sheet,uniquePrefix=''){
+		let className='';
+		if(uniquePrefix){
+			className=uniquePrefix+'-'+_dom.uid;
+			data={['.'+className]:data};
+		}
 		let rules={},rdata=_dom.getRulesData(data);
 		if(!(sheet instanceof CSSStyleSheet))sheet = _dom.sheet;
 		for(let k in rdata.rules){
-			try{rules[k]=_dom.rule(k,rdata.rules[k],sheet);}catch(e){
+			try{rules[k]=_rule(k,rdata.rules[k],sheet,rules,rdata.alias);}catch(e){
 				console.warn('_dom.rules Warning:\nInsertion of rule "'+k+'" failed!\n\n'+e);
 			}
 			if(k in rdata.alias)rules[rdata.alias[k]]=rules[k];
 		}
-		return rules;
+		return className?{className,rules}:rules;
  	};
 	_dom.getRulesData=function(data){
 		let res={rules:{},alias:{}};
-		let collect=function(dat,vars,pile){
+		let collect=function(dat,vars,pile,qres){
 			let obj={},rname;
 			if(pile.length)rname=pile.join('');
 			for(let prop in dat){
@@ -211,6 +237,9 @@ var _dom=(function(){
 				if(c==='$'){
 					vars[prop.substr(1)]=dat[prop];
 				}else if(c==='@'){
+					let sres={rules:{}};
+					collect(dat[prop],Object.assign({},vars),[],sres);
+					qres.rules[prop]=sres.rules;
 				}else if(!pile.length||c==='&'){
 					(pile.length?prop.substr(1):prop).split(',').forEach(name=>{
 						collect(dat[prop],Object.assign({},vars),pile.concat([name]));
@@ -226,8 +255,8 @@ var _dom=(function(){
 				}
 			}
 			if(rname){
-				if(res.rules[rname])Object.assign(res.rules[rname],obj);
-				else res.rules[rname]=obj;
+				if(qres.rules[rname])Object.assign(res.rules[rname],obj);
+				else qres.rules[rname]=obj;
 			}
 		};
 		collect(data,{},[]);
@@ -244,13 +273,6 @@ var _dom=(function(){
 		});
 		if(sheet)for(let k in robj)sheet.insertRule(robj[k].cssText);
 		return robj;
-	};
-	_dom.hasClass = function (element,className) {element.classList.contains(className);};
-	_dom.addClass = function (element,className) {element.classList.add(className);};
-	_dom.removeClass = function (element,className) {element.classList.remove(className);};
-	_dom.swapClass = function (element,classIn,classOut) {
-		_dom.removeClass(element,classOut);
-		_dom.addClass(element,classIn);
 	};
 	let shadowConstructor=function(scope,tagName,args,argTypes){
 		let shadow = scope.attachShadow({mode: 'open'});

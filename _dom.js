@@ -49,11 +49,12 @@ const _dom=(function(){
 	}
 	const _dom=function(tagName,datas,childs,nameSpace){
 		let args=arguments;
+		let node;
 		if(tagName in _models){
 			return _models[tagName].build(args);
 		}
 		try{
-			let node = typeof(nameSpace)==="string"?
+			node = typeof(nameSpace)==="string"?
 				document.createElementNS(nameSpace,tagName):
 				document.createElement(tagName);
 			if(!childs && (datas instanceof Array)){

@@ -5,7 +5,7 @@ const _dom=(function(){
 	// ------------- PRIVATE ---------------
 	// custom elements handling
 	let _modelref='__dom';
-	const _models={};
+	const _models={},debug=false;
 
 	class _Model{
 		constructor(tagName,constructor,cssRules){
@@ -30,7 +30,7 @@ const _dom=(function(){
 			return new _ModelInstance(this,args);
 		}
 	}
-	
+
 	class _ModelInstance{
 		constructor(model,args){
 			Object.defineProperty(this,'tagName',{get:function(){return model.tagName;}});
@@ -66,12 +66,12 @@ const _dom=(function(){
 	 * @returns {HTMLElement} a new html element
 	 */
 	const _dom=function(tagName,datas,childs,nameSpace){
-		let args=arguments;
+		let args=arguments,node;
 		if(tagName in _models){
 			return _models[tagName].build(args);
 		}
 		try{
-			let node = typeof(nameSpace)==="string"?
+			node = typeof(nameSpace)==="string"?
 				document.createElementNS(nameSpace,tagName):
 				document.createElement(tagName);
 			if(!childs && (datas instanceof Array)){

@@ -1,7 +1,7 @@
 const _dom=(function(){
 	if(window._dom)return window._dom;
 	let _modelref='__dom';
-	const _models={};
+	const _models={},debug=false;
 	class _Model{
 		constructor(tagName,constructor,cssRules){
 			let rules;
@@ -48,12 +48,12 @@ const _dom=(function(){
 		}
 	}
 	const _dom=function(tagName,datas,childs,nameSpace){
-		let args=arguments;
+		let args=arguments,node;
 		if(tagName in _models){
 			return _models[tagName].build(args);
 		}
 		try{
-			let node = typeof(nameSpace)==="string"?
+			node = typeof(nameSpace)==="string"?
 				document.createElementNS(nameSpace,tagName):
 				document.createElement(tagName);
 			if(!childs && (datas instanceof Array)){

@@ -242,7 +242,7 @@ const _dom=(function(){
 					qres.rules[prop]=sres.rules;
 				}else if(!pile.length||c==='&'){
 					(pile.length?prop.substr(1):prop).split(',').forEach(name=>{
-						collect(dat[prop],Object.assign({},vars),pile.concat([name]));
+						collect(dat[prop],Object.assign({},vars),pile.concat([name]),qres||res);
 					});
 				}else if(prop==='alias'){
 					res.alias[rname]=dat[prop];
